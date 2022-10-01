@@ -67,15 +67,4 @@ public:
     }
 };
 
-class ExitButton : public Button{
-public:
-    Space *space;
-    ExitButton(Space &space) : Button(0.05, 0.05, 0.07, "../Resources/ExitButton.png"){
-        this->space = &space;
-    }
-    void OnPress() override{
-        space->Stop();
-    }
-};
-
 #endif //GENETICALGORITHM_OBJECTS_BUTTON_H_
