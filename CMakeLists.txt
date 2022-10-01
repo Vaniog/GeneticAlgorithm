@@ -7,6 +7,6 @@ set(SFML_DIR "lib\\SFML-2.5.1\\lib\\cmake\\SFML")
 
 find_package(SFML 2.5 COMPONENTS graphics audio REQUIRED)
 
-add_executable(GeneticAlgorithm main.cpp GraphicsManager/Object.cpp)
+add_executable(GeneticAlgorithm main.cpp GraphicsManager/Object.cpp Objects/Button.h)
 
 target_link_libraries(GeneticAlgorithm sfml-graphics sfml-audio)
