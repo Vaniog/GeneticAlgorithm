@@ -1,6 +1,3 @@
-[submodule "graphics"]
-	path = graphics
-	url = ./graphics/
 [submodule "GraphicsManager"]
 	path = GraphicsManager
 	url = https://github.com/Vaniog/GraphicsManager
