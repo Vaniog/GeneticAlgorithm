@@ -2,6 +2,8 @@
 #define GENETICALGORITHM_OBJECTS_BUTTON_H_
 #include "../GraphicsManager/Object.h"
 
+#include "../SpaceManager.h"
+
 class Button : public Object {
     sf::Vector2<float> pos;
     sf::Vector2<float> size;
@@ -64,6 +66,42 @@ public:
     }
     virtual void OnPress() {
 
+    }
+};
+
+class ExitButton : public Button {
+    static const std::string IMAGE_PATH;
+public:
+    Space* space;
+    explicit ExitButton(Space& space) : Button(0.05, 0.05, 0.07, IMAGE_PATH) {
+        this->space = &space;
+    }
+    void OnPress() override {
+        space->Stop();
+    }
+};
+
+class MenuButton : public Button {
+    static const std::string IMAGE_PATH;
+public:
+    SpaceManager *space_manager;
+    explicit MenuButton(SpaceManager &space_manager) : Button(0.05, 0.05, 0.07, IMAGE_PATH) {
+        this->space_manager = &space_manager;
+    }
+    void OnPress() override {
+        space_manager->FillByTag(SpaceManager::Mode::MENU);
+    }
+};
+
+class StartButton : public Button {
+    static const std::string IMAGE_PATH;
+public:
+    SpaceManager *space_manager;
+    explicit StartButton(SpaceManager &space_manager) : Button(0.5, 0.5, 0.3, IMAGE_PATH) {
+        this->space_manager = &space_manager;
+    }
+    void OnPress() override {
+        space_manager->FillByTag(SpaceManager::Mode::PLAY);
     }
 };
 
