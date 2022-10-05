@@ -16,4 +16,5 @@ int main() {
     Space space;
     space << new Circle;
     space.Start();
+    evolution("a.txt","b.txt");
 }
