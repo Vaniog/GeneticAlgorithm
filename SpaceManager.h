@@ -13,7 +13,7 @@ public:
     Space& space;
     explicit SpaceManager(Space& space) : space(space) {
     }
-    void FillByTag(const Mode mode);
+    void FillByTag(Mode mode);
 };
 
 
