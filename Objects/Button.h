@@ -85,7 +85,7 @@ class MenuButton : public Button {
     static const std::string IMAGE_PATH;
 public:
     SpaceManager *space_manager;
-    explicit MenuButton(SpaceManager &space_manager) : Button(0.05, 0.05, 0.07, IMAGE_PATH) {
+    explicit MenuButton(SpaceManager &space_manager) : Button(0.03, 0.03, 0.05, IMAGE_PATH) {
         this->space_manager = &space_manager;
     }
     void OnPress() override {
