@@ -7,10 +7,6 @@ set(SFML_DIR "lib\\SFML-2.5.1\\lib\\cmake\\SFML")
 
 find_package(SFML 2.5 COMPONENTS graphics audio REQUIRED)
 
-<<<<<<< HEAD
-add_executable(GeneticAlgorithm main.cpp GraphicsManager/Object.cpp Objects/Button.h SpaceManager.h SpaceManager.cpp Objects/Background.h Objects/SceneDraft.h Objects/ConstantsInit.cpp)
-=======
 add_executable(GeneticAlgorithm main.cpp GraphicsManager/Object.cpp GeneticAlgorithmCore/Evolution.h GeneticAlgorithmCore/Evolution.cpp GeneticAlgorithmCore/Bot.h GeneticAlgorithmCore/Battle.cpp GeneticAlgorithmCore/Mutation.cpp GeneticAlgorithmCore/Scene.h)
->>>>>>> feature/CreateSubmodule
 
 target_link_libraries(GeneticAlgorithm sfml-graphics sfml-audio)
