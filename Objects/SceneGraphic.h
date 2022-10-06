@@ -113,7 +113,7 @@ private:
                     window.draw(rect);
                 } else if (cur.GetType() == ObjectsType::Bot) {
                     rect.setTexture(beast_texture);
-                    text.setString(std::to_string(bots[cur.bot].health));
+                    text.setString(std::to_string(scene->bots[cur.bot].health));
                     window.draw(rect);
                     window.draw(text);
                 } else if (cur.GetType() == ObjectsType::Food) {
