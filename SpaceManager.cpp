@@ -16,7 +16,7 @@ void SpaceManager::FillByTag(const SpaceManager::Mode mode){
             break;
         case Mode::PLAY:
             space << new MenuButton(*this);
-            space << new SceneGraphic(0.0, 0.0, 0.6);
+            space << new SceneGraphic(0.25, 0, 0.5);
             break;
     }
 }
