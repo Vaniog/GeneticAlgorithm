@@ -2,6 +2,7 @@
 #include "Objects/Background.h"
 #include "Objects/Button.h"
 #include "Objects/SceneDraft.h"
+#include "Objects/SceneGraphic.h"
 
 void SpaceManager::FillByTag(const SpaceManager::Mode mode){
     modes.push_back(mode);
@@ -15,7 +16,7 @@ void SpaceManager::FillByTag(const SpaceManager::Mode mode){
             break;
         case Mode::PLAY:
             space << new MenuButton(*this);
-            space << new SceneDraft(0.1, 0.1, 0.8);
+            space << new SceneGraphic(0.0, 0.0, 0.6);
             break;
     }
 }

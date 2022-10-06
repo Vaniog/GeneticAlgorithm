@@ -19,6 +19,6 @@ add_executable(GeneticAlgorithm main.cpp
         GeneticAlgorithmCore/Bot.h
         GeneticAlgorithmCore/Battle.cpp
         GeneticAlgorithmCore/Mutation.cpp
-        GeneticAlgorithmCore/Scene.h)
+        GeneticAlgorithmCore/Scene.h Objects/SceneGraphic.h)
 
 target_link_libraries(GeneticAlgorithm sfml-graphics sfml-audio)
