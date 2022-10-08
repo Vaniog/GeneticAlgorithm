@@ -105,4 +105,5 @@ public:
     }
 };
 
+
 #endif //GENETICALGORITHM_OBJECTS_BUTTON_H_

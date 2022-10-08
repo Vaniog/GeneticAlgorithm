@@ -1,3 +1,6 @@
 [submodule "GraphicsManager"]
 	path = GraphicsManager
 	url = https://github.com/Vaniog/GraphicsManager
+[submodule "GeneticAlgorithmCore"]
+	path = GeneticAlgorithmCore
+	url = https://github.com/EgorFarafonov367578/GeneticAlgorithmCore.git
