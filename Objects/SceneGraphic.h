@@ -61,7 +61,7 @@ public:
     }
 
     void BotsDownload() {
-        std::ifstream file(OLD_GEN_FILENAME, std::ios::in);
+        std::ifstream file(OLD_GEN_FILENAME);
         for (int j = 0; j < 64; j++) {
             int arr[64];
             for (int i = 0; i < 64; i++) {
@@ -72,21 +72,40 @@ public:
     }
 
     void BotsUpload() {
-        std::ofstream out_file(NEW_GEN_FILENAME, std::ios::in);
+        std::ofstream out_file(NEW_GEN_FILENAME, std::fstream::out | std::ofstream::trunc);
+        out_file.clear();
         for (int j = 0; j < 64; j++) {
             for (int i = 0; i < 64; i++) {
                 out_file << bots[j].GetDna(i) << " ";
             }
-            out_file << "/n";
+            out_file << "\n";
         }
     }
 
     void ReloadScene() {
-        BotsUpload();
         bots = scene->GetWinners();
         bots = Mutation(bots);
+        BotsUpload();
         delete scene;
         scene = new Scene(bots);
+        if (!scene_stats.empty())
+            scene_stats.emplace_back(scene_stats.back().generation_number + 1);
+        else
+            scene_stats.emplace_back(SceneStats(0));
+        if (scene_stats.size() >= MAX_STATS_SIZE)
+            scene_stats.erase(scene_stats.begin());
+        FillStats();
+    }
+
+    void RandomFill(){
+        std::ofstream out_file(OLD_GEN_FILENAME, std::fstream::out | std::ofstream::trunc);
+        out_file.clear();
+        for (int j = 0; j < 64; j++) {
+            for (int i = 0; i < 64; i++) {
+                out_file << rand() % 71 << " ";
+            }
+            out_file << "\n";
+        }
     }
 
 private:
@@ -121,12 +140,9 @@ private:
         scene->Iteration();
         if (scene->losers.size() >= 56) {
             ReloadScene();
-            scene_stats.emplace_back(scene_stats.back().generation_number + 1);
-            if (scene_stats.size() >= MAX_STATS_SIZE)
-                scene_stats.erase(scene_stats.begin());
         }
-        time_pass = 0;
         FillStats();
+        time_pass = 0;
     }
 
     void FillStats() {
@@ -193,7 +209,7 @@ private:
         std::string stats_string;
         stats_string += "Arrows - change speed\n F - draw off\n";
         stats_string += "Frame length - ";
-        stats_string += std::to_string(frame_length) + "ms\n";
+        stats_string += std::to_string(frame_length) + "ms\n\n";
         stats_string += "GEN-";
         stats_string += std::to_string(scene_stats.back().generation_number);
         stats_string += " | life: ";
@@ -224,9 +240,17 @@ private:
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
                 frame_length += 10;
+                frame_length = std::min(200l, frame_length);
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
                 frame_length -= 10;
+                frame_length = std::max(0l, frame_length);
+            }
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Tilde)) {
+                RandomFill();
+                BotsDownload();
+                scene_stats.clear();
+                ReloadScene();
             }
         }
     }

@@ -12,8 +12,8 @@ const std::string SceneDraft::FONT_PATH = "../Resources/Font.ttf";
 const int SceneDraft::FONT_BORDER = 2;
 
 
-const std::string SceneGraphic::OLD_GEN_FILENAME = "../Resources/a.txt";
-const std::string SceneGraphic::NEW_GEN_FILENAME = "../Resources/a.txt";
+const std::string SceneGraphic::OLD_GEN_FILENAME = "../Resources/b.txt";
+const std::string SceneGraphic::NEW_GEN_FILENAME = "../Resources/b.txt";
 const int32_t SceneGraphic::IMAGE_SIZE = 16;
 const std::string SceneGraphic::FIELD_PATH = "../Resources/Field.png";
 const std::string SceneGraphic::FOOD_PATH = "../Resources/Food.png";
