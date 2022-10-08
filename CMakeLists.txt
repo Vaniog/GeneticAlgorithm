@@ -3,7 +3,7 @@ project(GeneticAlgorithm)
 
 set(CMAKE_CXX_STANDARD 14)
 
-set(SFML_DIR "lib\\SFML-2.5.1\\lib\\cmake\\SFML")
+set(SFML_DIR "SFML-2.5.1\\lib\\cmake\\SFML")
 
 find_package(SFML 2.5 COMPONENTS graphics audio REQUIRED)
 
@@ -19,6 +19,6 @@ add_executable(GeneticAlgorithm main.cpp
         GeneticAlgorithmCore/Bot.h
         GeneticAlgorithmCore/Battle.cpp
         GeneticAlgorithmCore/Mutation.cpp
-        GeneticAlgorithmCore/Scene.h)
+        GeneticAlgorithmCore/Scene.h Objects/SceneGraphic.h)
 
 target_link_libraries(GeneticAlgorithm sfml-graphics sfml-audio)
