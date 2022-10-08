@@ -112,7 +112,7 @@ private:
 
     long time_pass = 0;
     long frame_length = 100;
-    bool draw_on = true;
+    bool draw_field_on = true;
 
     void OnFrame() override {
         time_pass += delta_time;
@@ -149,7 +149,7 @@ private:
     }
 
     void OnDraw(sf::RenderWindow& window) override {
-        if (draw_on)
+        if (draw_field_on)
             DrawField(window);
         DrawStats(window);
     }
@@ -211,7 +211,7 @@ private:
         }
 
         stats_text.setString(stats_string);
-        stats_text.setPosition(pos.x + (width + 1) * size * draw_on, pos.y);
+        stats_text.setPosition(pos.x + (width + 1) * size * draw_field_on, pos.y);
         stats_text.setFont(stats_font);
         stats_text.setCharacterSize(STATS_FONT_SIZE * size);
         window.draw(stats_text);
@@ -220,7 +220,7 @@ private:
     void OnEvent(sf::Event& event) override {
         if (event.type == sf::Event::KeyPressed) {
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::F)) {
-                draw_on = !draw_on;
+                draw_field_on = !draw_field_on;
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
                 frame_length += 10;
