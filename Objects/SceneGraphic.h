@@ -33,16 +33,7 @@ public:
     const static std::string NEW_GEN_FILENAME;
     SceneGraphic(float pos_x_percents, float pos_y_percents,
                  float size_x_percents) {
-
-        std::ifstream file(OLD_GEN_FILENAME, std::ios::in);
-        for (int j = 0; j < 64; j++) {
-            int arr[64];
-            for (int i = 0; i < 64; i++) {
-                file >> arr[i];
-            }
-            bots.push_back(Bot(arr));
-        }
-
+        BotsDownload();
         scene = new Scene(bots);
 
         pos.x = pos_x_percents * (float)window_width;
@@ -52,6 +43,38 @@ public:
 
         LoadTextures();
     }
+
+    void BotsDownload(){
+        std::ifstream file(OLD_GEN_FILENAME, std::ios::in);
+        for (int j = 0; j < 64; j++) {
+            int arr[64];
+            for (int i = 0; i < 64; i++) {
+                file >> arr[i];
+            }
+            bots.push_back(Bot(arr));
+        }
+    }
+
+    void BotsUpload(){
+        std::ofstream out_file(NEW_GEN_FILENAME, std::ios::in);
+        for (int j = 0; j < 64; j++)
+        {
+            for (int i = 0; i < 64; i++)
+            {
+                out_file << bots[j].GetDna(i) << " ";
+            }
+            out_file << "/n";
+        }
+    }
+
+    void ReloadScene(){
+        BotsUpload();
+        bots = scene->GetWinners();
+        bots = Mutation(bots);
+        delete scene;
+        scene = new Scene(bots);
+    }
+
 private:
     void LoadTextures() {
         sf::Image buff_image;
@@ -74,9 +97,11 @@ private:
     long time_pass = 0;
     void OnFrame() override {
         time_pass += delta_time;
-        if (time_pass < 200)
+        if (time_pass < 100)
             return;
         scene->Iteration();
+        if (scene->losers.size() >= 56)
+            ReloadScene();
         time_pass = 0;
     }
 
