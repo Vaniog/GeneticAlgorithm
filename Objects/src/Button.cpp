@@ -49,9 +49,6 @@ void Button::OnEvent(sf::Event& event) {
     }
 }
 
-void Button::OnPress() {
-}
-
 ExitButton::ExitButton(float pos_x_percents, float pos_y_percents, float size_x_percents, Space& space)
         : Button(pos_x_percents,
                  pos_y_percents,

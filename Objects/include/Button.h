@@ -26,7 +26,7 @@ public:
     bool was_pressed = false;
     void OnEvent(sf::Event& event) override;
 
-    virtual void OnPress();
+    virtual void OnPress() {};
 };
 
 class ExitButton : public Button {
