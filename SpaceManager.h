@@ -1,7 +1,7 @@
 #ifndef GENETICALGORITHM_SPACEMANAGER_H_
 #define GENETICALGORITHM_SPACEMANAGER_H_
 
-#include "GraphicsManager/Space.h"
+#include "GraphicsManager/include/Space.h"
 
 
 class SpaceManager {

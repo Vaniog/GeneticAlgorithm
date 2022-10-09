@@ -1,6 +1,6 @@
 #ifndef GENETICALGORITHM_OBJECTS_BUTTON_H_
 #define GENETICALGORITHM_OBJECTS_BUTTON_H_
-#include "../../GraphicsManager/Object.h"
+#include "../../GraphicsManager/include/Object.h"
 
 #include "../../SpaceManager.h"
 

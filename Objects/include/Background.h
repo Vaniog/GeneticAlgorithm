@@ -1,7 +1,7 @@
 #ifndef GENETICALGORITHM_OBJECTS_BACKGROUND_H_
 #define GENETICALGORITHM_OBJECTS_BACKGROUND_H_
 
-#include "../../GraphicsManager/Object.h"
+#include "../../GraphicsManager/include/Object.h"
 #include <cmath>
 
 class Background : public Object {
