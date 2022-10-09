@@ -1,5 +1,5 @@
-#include "Button.h"
-#include "SceneGraphic.h"
+#include "../include/Button.h"
+#include "../include/SceneGraphic.h"
 
 const std::string SceneGraphic::OLD_GEN_FILENAME = "../Resources/b.txt";
 const std::string SceneGraphic::NEW_GEN_FILENAME = "../Resources/b.txt";

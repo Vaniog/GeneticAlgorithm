@@ -1,4 +1,4 @@
-#include "SceneGraphic.h"
+#include "../include/SceneGraphic.h"
 
 SceneGraphic::SceneGraphic(float pos_x_percents, float pos_y_percents, float size_x_percents) {
     LoadSizes(pos_x_percents, pos_y_percents, size_x_percents);

@@ -1,7 +1,7 @@
 #include "SpaceManager.h"
-#include "Objects/Background.h"
-#include "Objects/Button.h"
-#include "Objects/SceneGraphic.h"
+#include "Objects/include/Background.h"
+#include "Objects/include/Button.h"
+#include "Objects/include/SceneGraphic.h"
 
 void SpaceManager::FillByTag(const SpaceManager::Mode mode){
     modes.push_back(mode);

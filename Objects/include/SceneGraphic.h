@@ -1,8 +1,8 @@
 #ifndef GENETICALGORITHM_OBJECTS_SCENEGRAPHIC_H_
 #define GENETICALGORITHM_OBJECTS_SCENEGRAPHIC_H_
 
-#include "../GraphicsManager/Object.h"
-#include "../GeneticAlgorithmCore/Evolution.h"
+#include "../../GraphicsManager/Object.h"
+#include "../../GeneticAlgorithmCore/Evolution.h"
 #include <fstream>
 
 struct SceneStats {

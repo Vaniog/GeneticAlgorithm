@@ -1,4 +1,4 @@
-#include "Button.h"
+#include "../include/Button.h"
 
 Button::Button(float pos_x_percents, float pos_y_percents, float size_x_percents, const std::string& image_name) {
     image.loadFromFile(image_name);

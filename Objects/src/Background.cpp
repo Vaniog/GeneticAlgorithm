@@ -1,4 +1,4 @@
-#include "Background.h"
+#include "../include/Background.h"
 Background::Background() {
     field.resize(amount_x * amount_y);
     Refill();

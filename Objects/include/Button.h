@@ -1,8 +1,8 @@
 #ifndef GENETICALGORITHM_OBJECTS_BUTTON_H_
 #define GENETICALGORITHM_OBJECTS_BUTTON_H_
-#include "../GraphicsManager/Object.h"
+#include "../../GraphicsManager/Object.h"
 
-#include "../SpaceManager.h"
+#include "../../SpaceManager.h"
 
 class Button : public Object {
     sf::Vector2<float> pos;
