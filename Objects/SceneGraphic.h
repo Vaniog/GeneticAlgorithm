@@ -27,92 +27,30 @@ class SceneGraphic : public Object {
     const int width = 66;
     const int height = 66;
 
+    const static std::string OLD_GEN_FILENAME;
+    const static std::string NEW_GEN_FILENAME;
+
+public:
+
+    std::vector<Bot> bots;
+    Scene* scene = nullptr;
+    uint32_t bots_left = 0;
+    static const int MAX_STATS_SIZE;
+    std::vector<SceneStats> scene_stats;
+
+    SceneGraphic(float pos_x_percents, float pos_y_percents,
+                 float size_x_percents) {
+        LoadSizes(pos_x_percents, pos_y_percents, size_x_percents);
+        LoadTextures();
+        LoadScene();
+    }
+
     sf::Texture field_texture;
     sf::Texture wall_texture;
     sf::Texture beast_texture;
     sf::Texture food_texture;
     sf::Texture poison_texture;
-    const static std::string OLD_GEN_FILENAME;
-    const static std::string NEW_GEN_FILENAME;
 
-    static const int MAX_STATS_SIZE;
-    std::vector<SceneStats> scene_stats;
-    ~SceneGraphic() = default;
-public:
-
-    std::vector<Bot> bots;
-    Scene* scene;
-    uint32_t bots_left = 0;
-
-    SceneGraphic(float pos_x_percents, float pos_y_percents,
-                 float size_x_percents) {
-        BotsDownload();
-        scene = new Scene(bots);
-
-        pos.x = pos_x_percents * (float)window_width;
-        pos.y = pos_y_percents * (float)window_height;
-        size = size_x_percents * (float)window_width / (float)width;
-        font_border_size = size * (float)(FONT_BORDER) / (float)(IMAGE_SIZE);
-
-        LoadTextures();
-        LoadScene();
-    }
-
-    void BotsDownload() {
-        std::ifstream file(OLD_GEN_FILENAME, std::fstream::in);
-        bots.clear();
-        for (int j = 0; j < 64; j++) {
-            int arr[64];
-            for (int i = 0; i < 64; i++) {
-                file >> arr[i];
-            }
-            bots.emplace_back(Bot(arr));
-        }
-    }
-
-    void BotsUpload() {
-        std::ofstream out_file(NEW_GEN_FILENAME, std::fstream::out | std::ofstream::trunc);
-        out_file.clear();
-        for (int j = 0; j < 64; j++) {
-            for (int i = 0; i < 64; i++) {
-                out_file << bots[j].GetDna(i) << " ";
-            }
-            out_file << "\n";
-        }
-    }
-
-    void LoadScene(){
-            scene_stats.emplace_back(SceneStats(scene_stats.size()));
-            BotsDownload();
-            delete scene;
-            scene = new Scene(bots);
-            FillStats();
-    };
-
-    void ReloadScene() {
-        bots = scene->GetWinners();
-        bots = Mutation(bots);
-        BotsUpload();
-        delete scene;
-        scene = new Scene(bots);
-        scene_stats.emplace_back(scene_stats.back().generation_number + 1);
-        if (scene_stats.size() >= MAX_STATS_SIZE)
-            scene_stats.erase(scene_stats.begin());
-        FillStats();
-    }
-
-    void RandomFill(){
-        std::ofstream out_file(OLD_GEN_FILENAME, std::fstream::out | std::ofstream::trunc);
-        out_file.clear();
-        for (int j = 0; j < 64; j++) {
-            for (int i = 0; i < 64; i++) {
-                out_file << rand() % 71 << " ";
-            }
-            out_file << "\n";
-        }
-    }
-
-private:
     void LoadTextures() {
         sf::Image buff_image;
         buff_image.loadFromFile(FIELD_PATH);
@@ -129,10 +67,77 @@ private:
         stats_font.loadFromFile(STATS_FONT_PATH);
         beast_health.setFont(health_font);
         stats_text.setFont(stats_font);
-        beast_health.setCharacterSize(size - 2 * font_border_size);
         beast_health.setFillColor(sf::Color::White);
     }
 
+    sf::Vector2<float> pos;
+    float size{};
+    float font_border_size{};
+
+    void LoadSizes(float pos_x_percents, float pos_y_percents,
+                   float size_x_percents) {
+        pos.x = pos_x_percents * (float)window_width;
+        pos.y = pos_y_percents * (float)window_height;
+        size = size_x_percents * (float)window_width / (float)width;
+        font_border_size = size * (float)(FONT_BORDER) / (float)(IMAGE_SIZE);
+        beast_health.setCharacterSize(static_cast<uint32_t>((size) - 2 * font_border_size));
+    }
+
+    void BotsDownload() {
+        std::ifstream file(OLD_GEN_FILENAME, std::fstream::in);
+        bots.clear();
+        for (int j = 0; j < 64; j++) {
+            int arr[64];
+            for (int& i : arr) {
+                file >> i;
+            }
+            bots.emplace_back(Bot(arr));
+        }
+    }
+
+    void BotsUpload() {
+        std::ofstream out_file(NEW_GEN_FILENAME, std::fstream::out | std::ofstream::trunc);
+        out_file.clear();
+        for (int j = 0; j < 64; j++) {
+            for (int i = 0; i < 64; i++) {
+                out_file << bots[j].GetDna(i) << " ";
+            }
+            out_file << "\n";
+        }
+    }
+
+    void LoadScene() {
+        scene_stats.emplace_back(SceneStats(scene_stats.size()));
+        BotsDownload();
+        delete scene;
+        scene = new Scene(bots);
+        FillStats();
+    };
+
+    void ReloadScene() {
+        bots = scene->GetWinners();
+        bots = Mutation(bots);
+        BotsUpload();
+        delete scene;
+        scene = new Scene(bots);
+        scene_stats.emplace_back(scene_stats.back().generation_number + 1);
+        if (scene_stats.size() >= MAX_STATS_SIZE)
+            scene_stats.erase(scene_stats.begin());
+        FillStats();
+    }
+
+    static void RandomFill() {
+        std::ofstream out_file(OLD_GEN_FILENAME, std::fstream::out | std::ofstream::trunc);
+        out_file.clear();
+        for (int j = 0; j < 64; j++) {
+            for (int i = 0; i < 64; i++) {
+                out_file << rand() % 71 << " ";
+            }
+            out_file << "\n";
+        }
+    }
+
+private:
     long time_pass = 0;
     long frame_length = 100;
     bool draw_field_on = true;
@@ -154,9 +159,6 @@ private:
         bots_left = 64 - scene->losers.size();
     }
 
-    sf::Vector2<float> pos;
-    float size;
-    float font_border_size;
     sf::Sprite field_tile;
     sf::Font health_font;
     sf::Font stats_font;
@@ -164,8 +166,10 @@ private:
     sf::Text stats_text;
 
     void PickPixel(const int& x, const int& y) {
-        field_tile.setPosition(pos.x + x * size, pos.y + y * size);
-        beast_health.setPosition(pos.x + x * size + font_border_size, pos.y + y * size + font_border_size);
+        auto xf = static_cast<float>(x);
+        auto yf = static_cast<float>(y);
+        field_tile.setPosition(pos.x + xf * size, pos.y + yf * size);
+        beast_health.setPosition(pos.x + xf * size + font_border_size, pos.y + yf * size + font_border_size);
     }
 
     void OnDraw(sf::RenderWindow& window) override {
@@ -234,6 +238,7 @@ private:
         stats_text.setPosition(pos.x + (width + 1) * size * draw_field_on, pos.y);
         stats_text.setFont(stats_font);
         stats_text.setCharacterSize(STATS_FONT_SIZE * size);
+
         window.draw(stats_text);
     }
 
