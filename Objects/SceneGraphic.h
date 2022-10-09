@@ -55,9 +55,7 @@ public:
         font_border_size = size * (float)(FONT_BORDER) / (float)(IMAGE_SIZE);
 
         LoadTextures();
-
-        scene_stats.emplace_back(SceneStats(scene_stats.size()));
-        FillStats();
+        LoadScene();
     }
 
     void BotsDownload() {
@@ -83,16 +81,21 @@ public:
         }
     }
 
+    void LoadScene(){
+            scene_stats.emplace_back(SceneStats(scene_stats.size()));
+            BotsDownload();
+            delete scene;
+            scene = new Scene(bots);
+            FillStats();
+    };
+
     void ReloadScene() {
         bots = scene->GetWinners();
         bots = Mutation(bots);
         BotsUpload();
         delete scene;
         scene = new Scene(bots);
-        if (!scene_stats.empty())
-            scene_stats.emplace_back(scene_stats.back().generation_number + 1);
-        else
-            scene_stats.emplace_back(SceneStats(0));
+        scene_stats.emplace_back(scene_stats.back().generation_number + 1);
         if (scene_stats.size() >= MAX_STATS_SIZE)
             scene_stats.erase(scene_stats.begin());
         FillStats();
@@ -249,9 +252,8 @@ private:
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Tilde)) {
                 RandomFill();
-                BotsDownload();
                 scene_stats.clear();
-                ReloadScene();
+                LoadScene();
             }
         }
     }
