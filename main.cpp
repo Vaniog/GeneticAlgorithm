@@ -1,5 +1,5 @@
 #include <iostream>
-#include "GraphicsManager/Space.h"
+#include "GraphicsManager/include/Space.h"
 #include "SpaceManager.h"
 #include "GeneticAlgorithmCore/Evolution.h"
 
