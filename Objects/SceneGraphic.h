@@ -71,14 +71,14 @@ public:
     }
 
     sf::Vector2<float> pos;
-    float size{};
+    float size{}; // of tile
     float font_border_size{};
 
     void LoadSizes(float pos_x_percents, float pos_y_percents,
                    float size_x_percents) {
-        pos.x = pos_x_percents * (float)window_width;
-        pos.y = pos_y_percents * (float)window_height;
         size = size_x_percents * (float)window_width / (float)width;
+        pos.x = pos_x_percents * (float)window_width - size * (float)width / 2;
+        pos.y = pos_y_percents * (float)window_height - size * (float)height / 2;
         font_border_size = size * (float)(FONT_BORDER) / (float)(IMAGE_SIZE);
         beast_health.setCharacterSize(static_cast<uint32_t>((size) - 2 * font_border_size));
     }
@@ -165,17 +165,17 @@ private:
     sf::Text beast_health;
     sf::Text stats_text;
 
+    void OnDraw(sf::RenderWindow& window) override {
+        if (draw_field_on)
+            DrawField(window);
+        DrawStats(window);
+    }
+
     void PickPixel(const int& x, const int& y) {
         auto xf = static_cast<float>(x);
         auto yf = static_cast<float>(y);
         field_tile.setPosition(pos.x + xf * size, pos.y + yf * size);
         beast_health.setPosition(pos.x + xf * size + font_border_size, pos.y + yf * size + font_border_size);
-    }
-
-    void OnDraw(sf::RenderWindow& window) override {
-        if (draw_field_on)
-            DrawField(window);
-        DrawStats(window);
     }
 
     void DrawField(sf::RenderWindow& window) {
