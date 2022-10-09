@@ -61,7 +61,8 @@ public:
     }
 
     void BotsDownload() {
-        std::ifstream file(OLD_GEN_FILENAME);
+        std::ifstream file(OLD_GEN_FILENAME, std::fstream::in);
+        bots.clear();
         for (int j = 0; j < 64; j++) {
             int arr[64];
             for (int i = 0; i < 64; i++) {
