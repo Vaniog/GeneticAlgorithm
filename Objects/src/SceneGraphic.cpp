@@ -194,7 +194,7 @@ void SceneGraphic::OnEvent(sf::Event& event, sf::RenderWindow &window) {
             frame_length -= 10;
             frame_length = std::max(0l, frame_length);
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Tilde)) {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) {
             RandomFill();
             scene_stats.clear();
             LoadScene();
