@@ -154,7 +154,7 @@ void SceneGraphic::DrawField(sf::RenderWindow& window) {
 
 void SceneGraphic::DrawStats(sf::RenderWindow& window) {
     std::string stats_string;
-    stats_string += "Arrows - change speed\n F - draw off\n Tilde - new random bots\n\n";
+    stats_string += "Arrows - change speed\n F - draw off\n Num1 - new random bots\n\n";
     stats_string += "Frame length - ";
     stats_string += std::to_string(frame_length) + "ms\n\n";
     stats_string += "GEN-";
