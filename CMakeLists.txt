@@ -3,13 +3,12 @@ project(GeneticAlgorithm)
 
 set(CMAKE_CXX_STANDARD 14)
 
-
-find_package(SFML 2.5 COMPONENTS graphics audio REQUIRED)
-
 if (WIN32)
     set(SFML_DIR "C:\\SFML\\lib\\cmake\\SFML")
     set(SFML_STATIC_LIBRARIES TRUE)
 endif (WIN32)
+
+find_package(SFML 2.5 COMPONENTS graphics audio REQUIRED)
 
 add_executable(GeneticAlgorithm main.cpp
         SpaceManager.h SpaceManager.cpp
