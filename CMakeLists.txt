@@ -3,12 +3,13 @@ project(GeneticAlgorithm)
 
 set(CMAKE_CXX_STANDARD 14)
 
-set(SFML_DIR "SFML-2.5.1\\lib\\cmake\\SFML")
+set(SFML_DIR "C:\\SFML\\lib\\cmake\\SFML")
 
 find_package(SFML 2.5 COMPONENTS graphics audio REQUIRED)
 
 add_executable(GeneticAlgorithm main.cpp
         GraphicsManager/src/Object.cpp
+        Objects/src/ConstantsInit.cpp
         Objects/include/Button.h Objects/src/Button.cpp
         SpaceManager.h SpaceManager.cpp
         Objects/include/Background.h Objects/src/Background.cpp
