@@ -87,6 +87,6 @@ private:
 
     void DrawStats(sf::RenderWindow& window);
 
-    void OnEvent(sf::Event& event) override;
+    void OnEvent(sf::Event& event, sf::RenderWindow &window) override;
 };
 #endif //GENETICALGORITHM_OBJECTS_SCENEGRAPHIC_H_

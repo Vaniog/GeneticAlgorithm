@@ -26,9 +26,9 @@ void Button::OnDraw(sf::RenderWindow& window) {
     window.draw(sprite);
 }
 
-void Button::OnEvent(sf::Event& event) {
+void Button::OnEvent(sf::Event& event, sf::RenderWindow &window) {
     if (event.type == sf::Event::MouseMoved || event.type == sf::Event::MouseButtonPressed) {
-        sf::Vector2<int> mouse = sf::Mouse::getPosition();
+        sf::Vector2<int> mouse = sf::Mouse::getPosition(window);
         std::cout << mouse.x << ":" << mouse.y << " in (" << window_width << "x" << window_height << ")\n";
         if (mouse.x >= pos.x - size.x / 2 && mouse.x <= pos.x + size.x / 2
                 && mouse.y >= pos.y - size.y / 2 && mouse.y <= pos.y + size.y / 2) {
