@@ -181,7 +181,7 @@ void SceneGraphic::DrawStats(sf::RenderWindow& window) {
     window.draw(stats_text);
 }
 
-void SceneGraphic::OnEvent(sf::Event& event, sf::RenderWindow &window) {
+void SceneGraphic::OnEvent(sf::Event& event, sf::RenderWindow& window) {
     if (event.type == sf::Event::KeyPressed) {
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::F)) {
             draw_field_on = !draw_field_on;
