@@ -2,5 +2,4 @@ cmake-build-debug
 .idea
 lib
 SFML-2.5.1/
-Resources/BotsData/bots.txt
 CMakeFiles/
