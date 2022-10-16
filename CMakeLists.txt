@@ -9,7 +9,7 @@ find_package(SFML 2.5 COMPONENTS graphics audio REQUIRED)
 
 add_executable(GeneticAlgorithm main.cpp
         GraphicsManager/src/Object.cpp
-        Objects/include/Button.h
+        Objects/include/Button.h Objects/src/Button.cpp
         SpaceManager.h SpaceManager.cpp
         Objects/include/Background.h Objects/src/Background.cpp
         Objects/src/ConstantsInit.cpp
@@ -17,7 +17,8 @@ add_executable(GeneticAlgorithm main.cpp
         GeneticAlgorithmCore/Bot.h
         GeneticAlgorithmCore/Battle.cpp
         GeneticAlgorithmCore/Mutation.cpp
-        GeneticAlgorithmCore/Scene.h Objects/include/SceneGraphic.h
+        GeneticAlgorithmCore/Scene.h
+        Objects/include/SceneGraphic.h Objects/src/SceneGraphic.cpp
         Objects/src/Background.cpp
         Objects/src/Button.cpp
         Objects/src/SceneGraphic.cpp
