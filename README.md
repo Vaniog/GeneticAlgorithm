@@ -8,39 +8,20 @@
 ---
   Building on linux:
   
+    #installing cmake
+    sudo apt-get insta ll cmake
+
+    #installing sfml library
     sudo apt-get install libsfml-dev
+    
+    #clone github project
     git clone https://github.com/Vaniog/GeneticAlgorithm
     cd GeneticAlgorithm
-    git checkout master
-    git submodule init
-    git submodule update
-    cmake ./
-    make
-    cd Objects/
-    ../GeneticAlgorithm
     
- -
- -
- -
- -
- -
- -
- -
- -
- -
- -
- -
- -
- -
- -
- -
- -
- -
- -
- -
- -
- -
- -
- -
- -
- ![Text](https://media.makeameme.org/created/thanks-for-watching-6672c4f82f.jpg)
+    #building project
+    mkdir build && cd build
+    cmake -DCMAKE_BUILD_TYPE=Release ..
+    make
+    
+    #and launch
+    ./GeneticAlgorithm
