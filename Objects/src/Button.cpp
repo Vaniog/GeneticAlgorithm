@@ -1,4 +1,5 @@
 #include "../include/Button.h"
+#include <iostream>
 
 Button::Button(float pos_x_percents, float pos_y_percents, float size_x_percents, const std::string& image_name) {
     image.loadFromFile(image_name);
@@ -25,9 +26,9 @@ void Button::OnDraw(sf::RenderWindow& window) {
     window.draw(sprite);
 }
 
-void Button::OnEvent(sf::Event& event) {
+void Button::OnEvent(sf::Event& event, sf::RenderWindow& window) {
     if (event.type == sf::Event::MouseMoved || event.type == sf::Event::MouseButtonPressed) {
-        sf::Vector2<int> mouse = sf::Mouse::getPosition();
+        sf::Vector2<int> mouse = sf::Mouse::getPosition(window);
         if (mouse.x >= pos.x - size.x / 2 && mouse.x <= pos.x + size.x / 2
                 && mouse.y >= pos.y - size.y / 2 && mouse.y <= pos.y + size.y / 2) {
             if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {

@@ -154,7 +154,7 @@ void SceneGraphic::DrawField(sf::RenderWindow& window) {
 
 void SceneGraphic::DrawStats(sf::RenderWindow& window) {
     std::string stats_string;
-    stats_string += "Arrows - change speed\n F - draw off\n Tilde - new random bots\n\n";
+    stats_string += "Arrows - change speed\n F - draw off\n Num1 - new random bots\n\n";
     stats_string += "Frame length - ";
     stats_string += std::to_string(frame_length) + "ms\n\n";
     stats_string += "GEN-";
@@ -181,7 +181,7 @@ void SceneGraphic::DrawStats(sf::RenderWindow& window) {
     window.draw(stats_text);
 }
 
-void SceneGraphic::OnEvent(sf::Event& event) {
+void SceneGraphic::OnEvent(sf::Event& event, sf::RenderWindow& window) {
     if (event.type == sf::Event::KeyPressed) {
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::F)) {
             draw_field_on = !draw_field_on;
@@ -194,7 +194,7 @@ void SceneGraphic::OnEvent(sf::Event& event) {
             frame_length -= 10;
             frame_length = std::max(0l, frame_length);
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Tilde)) {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) {
             RandomFill();
             scene_stats.clear();
             LoadScene();

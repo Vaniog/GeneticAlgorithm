@@ -2,5 +2,5 @@ cmake-build-debug
 .idea
 lib
 SFML-2.5.1/
-Resources/b.txt
 CMakeFiles/
+cmake-build-release

@@ -24,7 +24,7 @@ public:
     void OnDraw(sf::RenderWindow& window) override;
 
     bool was_pressed = false;
-    void OnEvent(sf::Event& event) override;
+    void OnEvent(sf::Event& event, sf::RenderWindow &window) override;
 
     virtual void OnPress() {};
 };
