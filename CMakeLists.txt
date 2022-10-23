@@ -20,6 +20,7 @@ add_executable(GeneticAlgorithm main.cpp
         Objects/include/Button.h Objects/src/Button.cpp
         Objects/include/Background.h Objects/src/Background.cpp
         Objects/include/SceneGraphic.h Objects/src/SceneGraphic.cpp
+        Objects/include/ButtonNew.h Objects/src/ButtonNew.cpp
 
         GeneticAlgorithmCore/Evolution.h GeneticAlgorithmCore/Evolution.cpp
         GeneticAlgorithmCore/Bot.h
