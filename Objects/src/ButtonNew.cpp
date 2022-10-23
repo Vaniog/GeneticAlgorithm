@@ -10,7 +10,7 @@ void ButtonData::ParseFromString(const std::string& parsing_string) {
         std::string variable = GetStringFromString(parsing_string, iter);
         SetVariable(variable_name, variable);
     }
-    if (!data_file_path.empty()){
+    if (!data_file_path.empty()) {
         ParseFromFile(data_file_path);
     }
 }
@@ -29,17 +29,17 @@ void ButtonData::SetVariable(const std::string& variable_name, const std::string
     if (variable_name == "data_file_path") {
         data_file_path = variable;
     } else if (variable_name == "width-%") {
-        width_in_percents = StringToFloat(variable);
+        width_in_percents = std::stof(variable);
     } else if (variable_name == "height-%") {
-        height_in_percents = StringToFloat(variable);
+        height_in_percents = std::stof(variable);
     } else if (variable_name == "width-p") {
         width_in_pixels = std::stoi(variable);
     } else if (variable_name == "height-p") {
         height_in_pixels = std::stoi(variable);
     } else if (variable_name == "pos_x-%") {
-        pos_x_in_percents = StringToFloat(variable);
+        pos_x_in_percents = std::stof(variable);
     } else if (variable_name == "pos_y-%") {
-        pos_y_in_percents = StringToFloat(variable);
+        pos_y_in_percents = std::stof(variable);
     } else if (variable_name == "pos_x-p") {
         pos_x_in_pixels = std::stoi(variable);
     } else if (variable_name == "pos_y-p") {
@@ -47,14 +47,48 @@ void ButtonData::SetVariable(const std::string& variable_name, const std::string
     } else if (variable_name == "text") {
         text = variable;
     } else if (variable_name == "text_color") {
-        text_color = variable;
+        text_color = GetColorFromString(variable);
+    } else if (variable_name == "color") {
+        fill_color = GetColorFromString(variable);
+    } else if (variable_name == "out_color") {
+        outline_color = GetColorFromString(variable);
+    } else if (variable_name == "out_thickness-%") {
+        outline_thickness_in_percents = std::stof(variable);
+    } else if (variable_name == "out_thickness-p") {
+        outline_thickness_in_pixels = std::stof(variable);
     } else if (variable_name == "image_path") {
         image_path = variable;
     }
 }
 
 bool IsSkipChar(const char& c) {
-    return c == ' ' || c == '\n' || c == '=';
+    return c == ' ' || c == '\n' || c == '=' || c == ':' || c == ';';
+}
+
+uint32_t ButtonData::GetColorFromString(const std::string& str) {
+    if (str[0] == '0') {
+        if (str.size() == 8) // if alpha not set
+            return static_cast<uint32_t>(std::stold(str + "FF"));
+        return static_cast<uint32_t>(std::stold(str));
+    }
+    if (str == "white") {
+        return 0xFFFFFFFF;
+    } else if (str == "black") {
+        return 0x000000FF;
+    } else if (str == "red") {
+        return 0xFF0000FF;
+    } else if (str == "green") {
+        return 0x00FF00FF;
+    } else if (str == "blue") {
+        return 0x0000FFFF;
+    } else if (str == "yellow") {
+        return 0xFFFF00FF;
+    } else if (str == "magenta") {
+        return 0xFF00FFFF;
+    } else if (str == "cyan") {
+        return 0x00FFFFFF;
+    }
+    return 0xFFFFFFFF;
 }
 
 std::string ButtonData::GetStringFromString(const std::string& parsing_string, uint32_t& iter) {
@@ -75,28 +109,11 @@ std::string ButtonData::GetStringFromString(const std::string& parsing_string, u
         }
     }
 
-    while (c == ' ' || c == '\n' || c == '=') {
+    while (IsSkipChar(c)) {
         c = parsing_string[++iter];
     }
 
     return str;
-}
-
-float ButtonData::StringToFloat(const std::string& str) {
-    float ans = 0;
-    uint32_t iter = 0;
-    while (str[iter] != '.') {
-        ans = ans * 10 + static_cast<float>(str[iter] - '0');
-        iter++;
-    }
-    iter++;
-    uint32_t digit_num = 1;
-    while (iter < str.size()) {
-        ans += static_cast<float>(str[iter] - '0') / static_cast<float>(pow(10, digit_num));
-        iter++;
-        digit_num++;
-    }
-    return ans;
 }
 
 NewButton::NewButton(const std::string& data_string) {
@@ -118,14 +135,25 @@ NewButton::NewButton(const std::string& data_string) {
         pos_y = static_cast<float>(window_height) * data.pos_y_in_percents;
     }
 
+    if (data.outline_thickness_in_percents != 0){
+        data.outline_thickness_in_pixels = static_cast<float>(window_width) * data.outline_thickness_in_percents;
+    }
+
     if (!data.image_path.empty()) {
+        sprite = new sf::Sprite;
+        texture = new sf::Texture;
         image_defined = true;
-        texture.loadFromFile(data.image_path);
-        float image_width = static_cast<float>(texture.getSize().x);
-        float image_height = static_cast<float>(texture.getSize().y);
+        texture->loadFromFile(data.image_path);
+        float image_width = static_cast<float>(texture->getSize().x);
+        float image_height = static_cast<float>(texture->getSize().y);
         size_scale = width / image_width;
         height = width * image_height / image_width;
-        sprite.setTexture(texture);
+        sprite->setTexture(*texture);
+    } else {
+        rectangle = new sf::RectangleShape(sf::Vector2f(width, height));
+        rectangle->setOutlineColor(sf::Color(data.outline_color));
+        rectangle->setFillColor(sf::Color(data.fill_color));
+        rectangle->setOutlineThickness(data.outline_thickness_in_pixels);
     }
 
     CorrectSize();
@@ -133,8 +161,11 @@ NewButton::NewButton(const std::string& data_string) {
 
 void NewButton::CorrectSize() {
     if (image_defined) {
-        sprite.setPosition(pos_x - width * scale / 2, pos_y - height * scale / 2);
-        sprite.setScale(size_scale * scale, size_scale * scale);
+        sprite->setPosition(pos_x - width * scale / 2, pos_y - height * scale / 2);
+        sprite->setScale(size_scale * scale, size_scale * scale);
+    } else {
+        rectangle->setPosition(pos_x - width * scale / 2, pos_y - height * scale / 2);
+        rectangle->setScale(scale, scale);
     }
 }
 
@@ -143,7 +174,11 @@ void NewButton::OnFrame() {
 }
 
 void NewButton::OnDraw(sf::RenderWindow& window) {
-    window.draw(sprite);
+    if (image_defined) {
+        window.draw(*sprite);
+    } else {
+        window.draw(*rectangle);
+    }
 }
 
 void NewButton::OnEvent(sf::Event& event, sf::RenderWindow& window) {

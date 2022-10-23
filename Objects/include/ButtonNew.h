@@ -16,8 +16,12 @@ struct ButtonData {
     uint32_t pos_x_in_pixels = 0; // pos_x-p
     uint32_t pos_y_in_pixels = 0; // pos_y-p
 
+    uint32_t fill_color = 0xFFFFFFFF; // color
     std::string text; // text
-    std::string text_color; // text_color
+    uint32_t text_color = 0xFFFFFFFF; // text_color
+    float outline_thickness_in_percents = 0; // out_thickness-%
+    float outline_thickness_in_pixels = 0; // out_thickness-p
+    uint32_t outline_color = 0xFFFFFFFF; // out_color
 
     std::string image_path; // image_path
 
@@ -27,7 +31,7 @@ struct ButtonData {
     void SetVariable(const std::string& variable_name, const std::string& variable);
 
     static std::string GetStringFromString(const std::string& parsing_string, uint32_t& iter);
-    static float StringToFloat(const std::string& str);
+    static uint32_t GetColorFromString(const std::string &str);
 };
 
 struct NewButton : public Object {
@@ -39,12 +43,13 @@ struct NewButton : public Object {
     float pos_x; // in pixels
     float pos_y; // in pixels
 
-    float size_scale = 1;
+    float size_scale = 1; // for sprite
     float scale = 1;
 
-    bool image_defined;
-    sf::Texture texture;
-    sf::Sprite sprite;
+    bool image_defined = false;
+    sf::Texture* texture;
+    sf::Sprite* sprite;
+    sf::RectangleShape* rectangle;
 
     explicit NewButton(const std::string& data_string);
 
