@@ -1,17 +1,31 @@
 #include "../include/ButtonNew.h"
 #include <cmath>
+#include <fstream>
 
 void ButtonData::ParseFromString(const std::string& parsing_string) {
     std::string variable_name;
     uint32_t iter = 0;
     while (iter < parsing_string.size()) {
         variable_name = GetStringFromString(parsing_string, iter);
-        GetVariable(variable_name, parsing_string, iter);
+        std::string variable = GetStringFromString(parsing_string, iter);
+        SetVariable(variable_name, variable);
+    }
+    if (!data_file_path.empty()){
+        ParseFromFile(data_file_path);
     }
 }
 
-void ButtonData::GetVariable(const std::string& variable_name, const std::string& parsing_string, uint32_t& iter) {
-    std::string variable = GetStringFromString(parsing_string, iter);
+void ButtonData::ParseFromFile(const std::string& file_name) {
+    std::ifstream file(file_name);
+    std::string variable_name;
+    std::string variable;
+    while (file >> variable_name) {
+        file >> variable;
+        SetVariable(variable_name, variable);
+    }
+}
+
+void ButtonData::SetVariable(const std::string& variable_name, const std::string& variable) {
     if (variable_name == "data_file_path") {
         data_file_path = variable;
     } else if (variable_name == "width-%") {

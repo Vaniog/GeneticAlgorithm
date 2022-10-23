@@ -22,8 +22,9 @@ struct ButtonData {
     std::string image_path; // image_path
 
     void ParseFromString(const std::string& parsing_string);
+    void ParseFromFile(const std::string& file_name);
 
-    void GetVariable(const std::string& variable_name, const std::string& parsing_string, uint32_t& iter);
+    void SetVariable(const std::string& variable_name, const std::string& variable);
 
     static std::string GetStringFromString(const std::string& parsing_string, uint32_t& iter);
     static float StringToFloat(const std::string& str);
