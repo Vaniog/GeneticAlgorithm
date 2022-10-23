@@ -4,7 +4,7 @@
 void ButtonData::ParseFromString(const std::string& parsing_string) {
     std::string variable_name;
     uint32_t iter = 0;
-    while (iter != parsing_string.size()) {
+    while (iter < parsing_string.size()) {
         variable_name = GetStringFromString(parsing_string, iter);
         GetVariable(variable_name, parsing_string, iter);
     }
@@ -39,18 +39,32 @@ void ButtonData::GetVariable(const std::string& variable_name, const std::string
     }
 }
 
+bool IsSkipChar(const char& c) {
+    return c == ' ' || c == '\n' || c == '=';
+}
+
 std::string ButtonData::GetStringFromString(const std::string& parsing_string, uint32_t& iter) {
     std::string str;
     char c = parsing_string[iter];
-    while (c != ' ' && c != '\n' && c != '=') {
-        str += c;
-        iter++;
-        c = parsing_string[iter];
+
+    if (c == '\"' || c == '\'') {
+        c = parsing_string[++iter];
+        while (c != '\'' && c != '\"') {
+            str += c;
+            c = parsing_string[++iter];
+        }
+        c = parsing_string[++iter];
+    } else {
+        while (!IsSkipChar(c) && iter < parsing_string.size()) {
+            str += c;
+            c = parsing_string[++iter];
+        }
     }
+
     while (c == ' ' || c == '\n' || c == '=') {
-        iter++;
-        c = parsing_string[iter];
+        c = parsing_string[++iter];
     }
+
     return str;
 }
 
@@ -95,8 +109,8 @@ NewButton::NewButton(const std::string& data_string) {
         texture.loadFromFile(data.image_path);
         float image_width = static_cast<float>(texture.getSize().x);
         float image_height = static_cast<float>(texture.getSize().y);
-        size_scale = height / image_height;
-        width = height * image_width / image_height;
+        size_scale = width / image_width;
+        height = width * image_height / image_width;
         sprite.setTexture(texture);
     }
 
