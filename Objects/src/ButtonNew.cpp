@@ -1,5 +1,4 @@
 #include "../include/ButtonNew.h"
-#include <cmath>
 #include <fstream>
 
 void ButtonData::ParseFromString(const std::string& parsing_string) {
@@ -33,21 +32,27 @@ void ButtonData::SetVariable(const std::string& variable_name, const std::string
     } else if (variable_name == "height-%") {
         height_in_percents = std::stof(variable);
     } else if (variable_name == "width-p") {
-        width_in_pixels = std::stoi(variable);
+        width_in_pixels = std::stof(variable);
     } else if (variable_name == "height-p") {
-        height_in_pixels = std::stoi(variable);
+        height_in_pixels = std::stof(variable);
     } else if (variable_name == "pos_x-%") {
         pos_x_in_percents = std::stof(variable);
     } else if (variable_name == "pos_y-%") {
         pos_y_in_percents = std::stof(variable);
     } else if (variable_name == "pos_x-p") {
-        pos_x_in_pixels = std::stoi(variable);
+        pos_x_in_pixels = std::stof(variable);
     } else if (variable_name == "pos_y-p") {
-        pos_y_in_pixels = std::stoi(variable);
+        pos_y_in_pixels = std::stof(variable);
     } else if (variable_name == "text") {
         text = variable;
     } else if (variable_name == "text_color") {
         text_color = GetColorFromString(variable);
+    } else if (variable_name == "font_path") {
+        font_path = variable;
+    } else if (variable_name == "char_size-%") {
+        character_size_in_percents = std::stof(variable);
+    } else if (variable_name == "char_size-p") {
+        character_size_in_pixels = std::stof(variable);
     } else if (variable_name == "color") {
         fill_color = GetColorFromString(variable);
     } else if (variable_name == "out_color") {
@@ -116,7 +121,8 @@ std::string ButtonData::GetStringFromString(const std::string& parsing_string, u
     return str;
 }
 
-NewButton::NewButton(const std::string& data_string) {
+NewButton::NewButton(
+        const std::string& data_string) {
     data.ParseFromString(data_string);
 
     if (data.width_in_pixels != 0) {
@@ -135,8 +141,12 @@ NewButton::NewButton(const std::string& data_string) {
         pos_y = static_cast<float>(window_height) * data.pos_y_in_percents;
     }
 
-    if (data.outline_thickness_in_percents != 0){
+    if (data.outline_thickness_in_percents != 0) {
         data.outline_thickness_in_pixels = static_cast<float>(window_width) * data.outline_thickness_in_percents;
+    }
+
+    if (data.character_size_in_percents != 0) {
+        data.character_size_in_pixels = static_cast<float>(window_width) * data.character_size_in_percents;
     }
 
     if (!data.image_path.empty()) {
@@ -156,16 +166,35 @@ NewButton::NewButton(const std::string& data_string) {
         rectangle->setOutlineThickness(data.outline_thickness_in_pixels);
     }
 
+    if (!data.font_path.empty()) {
+        text = new sf::Text;
+        font = new sf::Font;
+        text_defined = true;
+        font->loadFromFile(data.font_path);
+        text->setString(data.text);
+        text->setFont(*font);
+        text->setFillColor(sf::Color(data.text_color));
+        text->setCharacterSize(static_cast<uint32_t>(data.character_size_in_pixels));
+        //width = text->getGlobalBounds().width;
+        //height = text->getGlobalBounds().height;
+        //rectangle->setSize(sf::Vector2f(text->getGlobalBounds().width, text->getGlobalBounds().height));
+    }
+
     CorrectSize();
 }
 
-void NewButton::CorrectSize() {
+void NewButton::CorrectSize() const {
     if (image_defined) {
         sprite->setPosition(pos_x - width * scale / 2, pos_y - height * scale / 2);
         sprite->setScale(size_scale * scale, size_scale * scale);
     } else {
         rectangle->setPosition(pos_x - width * scale / 2, pos_y - height * scale / 2);
         rectangle->setScale(scale, scale);
+    }
+    if (text_defined) {
+        text->setPosition(pos_x - text->getLocalBounds().width * scale / 2,
+                          pos_y - text->getLocalBounds().height * scale / 2);
+        text->setScale(scale, scale);
     }
 }
 
@@ -178,6 +207,10 @@ void NewButton::OnDraw(sf::RenderWindow& window) {
         window.draw(*sprite);
     } else {
         window.draw(*rectangle);
+    }
+
+    if (text_defined) {
+        window.draw(*text);
     }
 }
 

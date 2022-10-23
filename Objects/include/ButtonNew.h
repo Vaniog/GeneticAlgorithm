@@ -8,17 +8,21 @@ struct ButtonData {
 
     float width_in_percents = 0; // width-%
     float height_in_percents = 0; // height-%
-    uint32_t width_in_pixels = 0; // width-p
-    uint32_t height_in_pixels = 0; // height-p
+    float width_in_pixels = 0; // width-p
+    float height_in_pixels = 0; // height-p
 
     float pos_x_in_percents = 0; // pos_x-%
     float pos_y_in_percents = 0; // pos_y-%
-    uint32_t pos_x_in_pixels = 0; // pos_x-p
-    uint32_t pos_y_in_pixels = 0; // pos_y-p
+    float pos_x_in_pixels = 0; // pos_x-p
+    float pos_y_in_pixels = 0; // pos_y-p
+
+    std::string text; // text
+    std::string font_path;
+    uint32_t text_color = 0xFFFFFFFF; // text_color
+    float character_size_in_percents = 0; // char_size-%
+    float character_size_in_pixels = 0; // char_size-p
 
     uint32_t fill_color = 0xFFFFFFFF; // color
-    std::string text; // text
-    uint32_t text_color = 0xFFFFFFFF; // text_color
     float outline_thickness_in_percents = 0; // out_thickness-%
     float outline_thickness_in_pixels = 0; // out_thickness-p
     uint32_t outline_color = 0xFFFFFFFF; // out_color
@@ -31,7 +35,7 @@ struct ButtonData {
     void SetVariable(const std::string& variable_name, const std::string& variable);
 
     static std::string GetStringFromString(const std::string& parsing_string, uint32_t& iter);
-    static uint32_t GetColorFromString(const std::string &str);
+    static uint32_t GetColorFromString(const std::string& str);
 };
 
 struct NewButton : public Object {
@@ -49,11 +53,16 @@ struct NewButton : public Object {
     bool image_defined = false;
     sf::Texture* texture;
     sf::Sprite* sprite;
+
     sf::RectangleShape* rectangle;
+
+    bool text_defined = false;
+    sf::Text* text;
+    sf::Font* font;
 
     explicit NewButton(const std::string& data_string);
 
-    void CorrectSize();
+    void CorrectSize() const;
 
     void OnFrame() override;
 
