@@ -3,7 +3,7 @@
 #include "SFML/Graphics.hpp"
 #include "../../GraphicsManager/include/Object.h"
 
-struct ButtonData {
+struct ButtonDataOld {
     std::string data_file_path; // data_file_path
 
     float width_in_percents = 0; // width-%
@@ -39,7 +39,7 @@ struct ButtonData {
 };
 
 struct NewButton : public Object {
-    ButtonData data;
+    ButtonDataOld data;
 
     float width; // in pixels
     float height; // in pixels

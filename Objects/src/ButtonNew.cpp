@@ -1,7 +1,7 @@
 #include "../include/ButtonNew.h"
 #include <fstream>
 
-void ButtonData::ParseFromString(const std::string& parsing_string) {
+void ButtonDataOld::ParseFromString(const std::string& parsing_string) {
     std::string variable_name;
     uint32_t iter = 0;
     while (iter < parsing_string.size()) {
@@ -14,7 +14,7 @@ void ButtonData::ParseFromString(const std::string& parsing_string) {
     }
 }
 
-void ButtonData::ParseFromFile(const std::string& file_name) {
+void ButtonDataOld::ParseFromFile(const std::string& file_name) {
     std::ifstream file(file_name);
     std::string variable_name;
     std::string variable;
@@ -24,7 +24,7 @@ void ButtonData::ParseFromFile(const std::string& file_name) {
     }
 }
 
-void ButtonData::SetVariable(const std::string& variable_name, const std::string& variable) {
+void ButtonDataOld::SetVariable(const std::string& variable_name, const std::string& variable) {
     if (variable_name == "data_file_path") {
         data_file_path = variable;
     } else if (variable_name == "width-%") {
@@ -66,11 +66,11 @@ void ButtonData::SetVariable(const std::string& variable_name, const std::string
     }
 }
 
-bool IsSkipChar(const char& c) {
+bool IsSkipChar1(const char& c) {
     return c == ' ' || c == '\n' || c == '=' || c == ':' || c == ';';
 }
 
-uint32_t ButtonData::GetColorFromString(const std::string& str) {
+uint32_t ButtonDataOld::GetColorFromString(const std::string& str) {
     std::string str_copy = str;
     if (str[0] == '0' || str[0] == '#') {
         if (str[0] == '#') { // #fafafa -> 0xfafafa
@@ -103,7 +103,7 @@ uint32_t ButtonData::GetColorFromString(const std::string& str) {
     return 0xFFFFFFFF;
 }
 
-std::string ButtonData::GetStringFromString(const std::string& parsing_string, uint32_t& iter) {
+std::string ButtonDataOld::GetStringFromString(const std::string& parsing_string, uint32_t& iter) {
     std::string str;
     char c = parsing_string[iter];
 
@@ -115,21 +115,20 @@ std::string ButtonData::GetStringFromString(const std::string& parsing_string, u
         }
         c = parsing_string[++iter];
     } else {
-        while (!IsSkipChar(c) && iter < parsing_string.size()) {
+        while (!IsSkipChar1(c) && iter < parsing_string.size()) {
             str += c;
             c = parsing_string[++iter];
         }
     }
 
-    while (IsSkipChar(c)) {
+    while (IsSkipChar1(c)) {
         c = parsing_string[++iter];
     }
 
     return str;
 }
 
-NewButton::NewButton(
-        const std::string& data_string) {
+NewButton::NewButton(const std::string& data_string) {
     data.ParseFromString(data_string);
 
     if (data.width_in_pixels != 0) {

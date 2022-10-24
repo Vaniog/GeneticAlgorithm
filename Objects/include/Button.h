@@ -1,5 +1,4 @@
-#ifndef GENETICALGORITHM_OBJECTS_BUTTON_H_
-#define GENETICALGORITHM_OBJECTS_BUTTON_H_
+#pragma once
 #include "../../GraphicsManager/include/Object.h"
 
 #include "../../SpaceManager.h"
@@ -61,5 +60,3 @@ public:
 
     void OnPress() override;
 };
-
-#endif //GENETICALGORITHM_OBJECTS_BUTTON_H_

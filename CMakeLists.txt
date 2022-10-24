@@ -27,5 +27,5 @@ add_executable(GeneticAlgorithm main.cpp
         GeneticAlgorithmCore/Battle.cpp
         GeneticAlgorithmCore/Mutation.cpp
         GeneticAlgorithmCore/Scene.h
-        )
+        GraphicsManager/include/ObjectsAttributes.h GraphicsManager/src/ObjectsAttributes.cpp Objects/src/ButtonBest.cpp Objects/include/ButtonBest.h)
 target_link_libraries(GeneticAlgorithm sfml-graphics sfml-audio)
