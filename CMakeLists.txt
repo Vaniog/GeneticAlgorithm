@@ -17,15 +17,14 @@ add_executable(GeneticAlgorithm main.cpp
         GraphicsManager/include/Space.h GraphicsManager/src/Space.cpp
 
         Objects/src/ConstantsInit.cpp
-        Objects/include/Button.h Objects/src/Button.cpp
+        Objects/include/ButtonOld.h
         Objects/include/Background.h Objects/src/Background.cpp
         Objects/include/SceneGraphic.h Objects/src/SceneGraphic.cpp
-        Objects/include/ButtonNew.h Objects/src/ButtonNew.cpp
 
         GeneticAlgorithmCore/Evolution.h GeneticAlgorithmCore/Evolution.cpp
         GeneticAlgorithmCore/Bot.h
         GeneticAlgorithmCore/Battle.cpp
         GeneticAlgorithmCore/Mutation.cpp
         GeneticAlgorithmCore/Scene.h
-        GraphicsManager/include/ObjectsAttributes.h GraphicsManager/src/ObjectsAttributes.cpp Objects/src/ButtonBest.cpp Objects/include/ButtonBest.h)
+        GraphicsManager/include/ObjectsAttributes.h GraphicsManager/src/ObjectsAttributes.cpp Objects/src/Button.cpp Objects/include/Button.h)
 target_link_libraries(GeneticAlgorithm sfml-graphics sfml-audio)
