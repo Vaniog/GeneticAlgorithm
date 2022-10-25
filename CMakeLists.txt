@@ -17,7 +17,6 @@ add_executable(GeneticAlgorithm main.cpp
         GraphicsManager/include/Space.h GraphicsManager/src/Space.cpp
 
         Objects/src/ConstantsInit.cpp
-        Objects/include/Button.h Objects/src/Button.cpp
         Objects/include/Background.h Objects/src/Background.cpp
         Objects/include/SceneGraphic.h Objects/src/SceneGraphic.cpp
 
@@ -27,5 +26,5 @@ add_executable(GeneticAlgorithm main.cpp
         GeneticAlgorithmCore/Battle.cpp
         GeneticAlgorithmCore/Mutation.cpp
         GeneticAlgorithmCore/Scene.h
-        )
+        GraphicsManager/include/ObjectsAttributes.h GraphicsManager/src/ObjectsAttributes.cpp Objects/src/Button.cpp Objects/include/Button.h)
 target_link_libraries(GeneticAlgorithm sfml-graphics sfml-audio)

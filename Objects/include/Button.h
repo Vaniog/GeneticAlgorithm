@@ -1,65 +1,66 @@
-#ifndef GENETICALGORITHM_OBJECTS_BUTTON_H_
-#define GENETICALGORITHM_OBJECTS_BUTTON_H_
+#pragma once
+#include <iostream>
+#include "SFML/Graphics.hpp"
 #include "../../GraphicsManager/include/Object.h"
-
 #include "../../SpaceManager.h"
 
 class Button : public Object {
-    sf::Vector2<float> pos;
-    sf::Vector2<float> size;
-    float scale = 1;
-    std::string image_name;
-    sf::Sprite sprite;
-    sf::Image image;
-    sf::Texture texture;
-public:
-    Button(float pos_x_percents, float pos_y_percents,
-           float size_x_percents,
-           const std::string& image_name);
+    float width; // in pixels
+    float height; // in pixels
 
-    void CorrectSize();
+    float pos_x; // in pixels
+    float pos_y; // in pixels
+
+    float size_scale = 1; // for sprite
+    float scale = 1;
+
+    bool image_defined = false;
+    sf::Texture* texture;
+    sf::Sprite* sprite;
+
+    sf::RectangleShape* rectangle;
+
+    bool text_defined = false;
+    sf::Text* text;
+    float char_size; // in pixels
+    float out_thick; // in pixels
+    sf::Font* font;
+public:
+    explicit Button(const std::string& parse_str);
+
+    void CorrectSize() const;
 
     void OnFrame() override;
 
     void OnDraw(sf::RenderWindow& window) override;
 
     bool was_pressed = false;
-    void OnEvent(sf::Event& event, sf::RenderWindow &window) override;
-
+    void OnEvent(sf::Event& event, sf::RenderWindow& window) override;
     virtual void OnPress() {};
 };
 
 class ExitButton : public Button {
-    static const std::string IMAGE_PATH;
 public:
-    Space* space;
-
-    ExitButton(float pos_x_percents, float pos_y_percents,
-               float size_x_percents, Space& space);
+    Space& space;
+    explicit ExitButton(const std::string& parse_str, Space& space);
 
     void OnPress() override;
 };
 
 class MenuButton : public Button {
-    static const std::string IMAGE_PATH;
-public:
-    SpaceManager* space_manager;
+    SpaceManager& space_manager;
 
-    MenuButton(float pos_x_percents, float pos_y_percents,
-               float size_x_percents, SpaceManager& space_manager);
+public:
+    explicit MenuButton(const std::string& parse_str, SpaceManager& space_manager);
 
     void OnPress() override;
 };
 
 class StartButton : public Button {
-    static const std::string IMAGE_PATH;
-public:
-    SpaceManager* space_manager;
+    SpaceManager& space_manager;
 
-    StartButton(float pos_x_percents, float pos_y_percents,
-                float size_x_percents, SpaceManager& space_manager);
+public:
+    explicit StartButton(const std::string& parse_str, SpaceManager& space_manager);
 
     void OnPress() override;
 };
-
-#endif //GENETICALGORITHM_OBJECTS_BUTTON_H_
