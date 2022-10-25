@@ -17,7 +17,6 @@ add_executable(GeneticAlgorithm main.cpp
         GraphicsManager/include/Space.h GraphicsManager/src/Space.cpp
 
         Objects/src/ConstantsInit.cpp
-        Objects/include/ButtonOld.h
         Objects/include/Background.h Objects/src/Background.cpp
         Objects/include/SceneGraphic.h Objects/src/SceneGraphic.cpp
 

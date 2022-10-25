@@ -1,4 +1,3 @@
-#include <iostream>
 #include "GraphicsManager/include/Space.h"
 #include "SpaceManager.h"
 #include "GeneticAlgorithmCore/Evolution.h"
