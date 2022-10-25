@@ -9,7 +9,7 @@
   Building on linux:
   
     #installing cmake
-    sudo apt-get insta ll cmake
+    sudo apt-get install cmake
 
     #installing sfml library
     sudo apt-get install libsfml-dev
