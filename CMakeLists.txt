@@ -23,6 +23,7 @@ add_executable(GeneticAlgorithm main.cpp
 
         GeneticAlgorithmCore/Evolution.h GeneticAlgorithmCore/Evolution.cpp
         GeneticAlgorithmCore/Bot.h
+        GeneticAlgorithmCore/Bot.cpp
         GeneticAlgorithmCore/Battle.cpp
         GeneticAlgorithmCore/Mutation.cpp
         GeneticAlgorithmCore/Scene.h
