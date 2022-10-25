@@ -7,8 +7,6 @@
 class Button : public Object {
     float width; // in pixels
     float height; // in pixels
-    float rect_width; // in pixels
-    float rect_height; // in pixels
 
     float pos_x; // in pixels
     float pos_y; // in pixels

@@ -25,12 +25,11 @@ Button::Button(const std::string& parse_str) {
         height = width * image_height / image_width;
         sprite->setTexture(*texture);
     } else {
-        rect_width = width - out_thick * 2;
-        rect_height = height - out_thick * 2;
-        rectangle = new sf::RectangleShape(sf::Vector2f(rect_width, rect_height));
+        rectangle = new sf::RectangleShape(sf::Vector2f(width - 2 * out_thick, height - 2 * out_thick));
         rectangle->setOutlineColor(sf::Color(attrs->GetColor("out_color")));
         rectangle->setFillColor(sf::Color(attrs->GetColor("fill_color")));
         rectangle->setOutlineThickness(out_thick);
+        rectangle->setOrigin(-out_thick, -out_thick);
     }
 
     if (!attrs->GetString("font_path").empty()) {
@@ -56,8 +55,8 @@ void Button::CorrectSize() const {
         sprite->setPosition(pos_x - width * scale / 2, pos_y - height * scale / 2);
     } else {
         rectangle->setScale(scale, scale);
-        rectangle->setPosition(pos_x - rect_width * scale / 2,
-                               pos_y - rect_height * scale / 2);
+        rectangle->setPosition(pos_x - width * scale / 2,
+                               pos_y - height * scale / 2);
     }
     if (text_defined) {
         text->setScale(scale, scale);
@@ -110,6 +109,7 @@ void Button::OnEvent(sf::Event& event, sf::RenderWindow& window) {
 }
 
 ExitButton::ExitButton(const std::string& parse_str, Space& space) : Button(parse_str), space(space) {};
+
 void ExitButton::OnPress() {
     space.Stop();
 }
