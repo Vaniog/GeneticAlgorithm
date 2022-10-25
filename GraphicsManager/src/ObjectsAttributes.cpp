@@ -42,7 +42,7 @@ uint32_t ObjectsAttributes::GetColorFromString(const std::string& str) {
         if (str_copy.size() == 8) { // 0xfafafa -> 0xfafafaff (alpha canal added)
             str_copy += "FF";
         }
-        return static_cast<uint32_t>(std::stold(str_copy));
+        return static_cast<uint32_t>(std::stoul(str_copy, nullptr, 16));
     }
     if (str == "white") {
         return 0xFFFFFFFF;
