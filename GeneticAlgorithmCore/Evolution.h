@@ -1,7 +1,4 @@
-#ifndef GENETICALGORITHM_EVOLUTION_H
-#define GENETICALGORITHM_EVOLUTION_H
-
-#endif //GENETICALGORITHM_EVOLUTION_H
+#pragma once
 
 #include <string>
 #include <vector>

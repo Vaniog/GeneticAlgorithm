@@ -1,28 +1,42 @@
 #ifndef GENETICALGORITHM_GRAPHICS_SPACE_H_
 #define GENETICALGORITHM_GRAPHICS_SPACE_H_
 #include "Object.h"
+#include "SpaceManager.h"
 
 #include <vector>
+#include <set>
 
 class Space {
-    std::vector<Object*> objects;
-    bool running = true;
-    const unsigned int window_height = sf::VideoMode::getDesktopMode().height;
-    const unsigned int window_width = sf::VideoMode::getDesktopMode().width;
+    std::map<std::string, Object*> objects; // objects and their id
+    bool is_running = true;
+private:
+    Space(); // singleton private constructor
+    Space(const Space&) {}; // singleton private copy constructor
+    static Space instance; // singleton
+    SpaceManager *space_manager;
 public:
-    Space() = default;
+    static Space& GetInstance();
+    Space& operator=(const Space&) = delete;
+
     ~Space();
 
     Space& operator<<(Object* object);
+    void AddSpaceManager(SpaceManager* space_manager);
+    static Object* GetObjectById(const std::string& id);
+
+    bool need_to_refill_by_tag = false;
+    std::string current_tag;
+    void FillByTag(const std::string& tag);
+
     void Start();
     void Stop();
     void Clear();
     void SaveParams();
-private:
 
+private:
     void OnFrame();
     void OnDraw(sf::RenderWindow& window);
-    void OnEvent(sf::Event& event, sf::RenderWindow &window);
+    void OnEvent(sf::Event& event, sf::RenderWindow& window);
 };
 
 #endif //GENETICALGORITHM_GRAPHICS_SPACE_H_

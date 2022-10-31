@@ -11,7 +11,7 @@ public:
     static const unsigned int window_width;
     static const unsigned int window_height;
 public:
-    ObjectsAttributes *attrs = nullptr;
+    ObjectsAttributes *attrs = new ObjectsAttributes();
     virtual void OnFrame() {}
     virtual void OnDraw(sf::RenderWindow& window) {}
     virtual void OnEvent(sf::Event& event, sf::RenderWindow& window) {}

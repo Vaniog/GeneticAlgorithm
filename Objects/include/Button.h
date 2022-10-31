@@ -2,7 +2,8 @@
 #include <iostream>
 #include "SFML/Graphics.hpp"
 #include "../../GraphicsManager/include/Object.h"
-#include "../../SpaceManager.h"
+#include "../../GraphicsManager/include/SpaceManager.h"
+#include "../../GraphicsManager/include/Space.h"
 
 class Button : public Object {
     float width; // in pixels

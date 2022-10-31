@@ -117,11 +117,11 @@ void ExitButton::OnPress() {
 MenuButton::MenuButton(const std::string& parse_str, SpaceManager& space_manager)
         : Button(parse_str), space_manager(space_manager) {}
 void MenuButton::OnPress() {
-    space_manager.FillByTag(SpaceManager::Mode::MENU);
+    Space::GetInstance().FillByTag("MENU");
 }
 
 StartButton::StartButton(const std::string& parse_str, SpaceManager& space_manager)
         : Button(parse_str), space_manager(space_manager) {}
 void StartButton::OnPress() {
-    space_manager.FillByTag(SpaceManager::Mode::PLAY);
+    Space::GetInstance().FillByTag("PLAY");
 }

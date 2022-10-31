@@ -1,10 +1,9 @@
 #include "GraphicsManager/include/Space.h"
-#include "SpaceManager.h"
-#include "GeneticAlgorithmCore/Evolution.h"
+#include "MySpaceManager.h"
 
 int main() {
-    Space space;
-    SpaceManager space_manager(space);
-    space_manager.FillByTag(SpaceManager::Mode::MENU);
+    Space& space = Space::GetInstance();
+    space.AddSpaceManager(new MySpaceManager);
+    space.FillByTag("MENU");
     space.Start();
 }

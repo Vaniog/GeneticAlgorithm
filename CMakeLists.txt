@@ -11,7 +11,7 @@ endif (WIN32)
 find_package(SFML 2.5 COMPONENTS graphics audio REQUIRED)
 
 add_executable(GeneticAlgorithm main.cpp
-        SpaceManager.h SpaceManager.cpp
+        GraphicsManager/include/SpaceManager.h GraphicsManager/src/SpaceManager.cpp
 
         GraphicsManager/include/Object.h GraphicsManager/src/Object.cpp
         GraphicsManager/include/Space.h GraphicsManager/src/Space.cpp
@@ -26,5 +26,7 @@ add_executable(GeneticAlgorithm main.cpp
         GeneticAlgorithmCore/Battle.cpp
         GeneticAlgorithmCore/Mutation.cpp
         GeneticAlgorithmCore/Scene.h
-        GraphicsManager/include/ObjectsAttributes.h GraphicsManager/src/ObjectsAttributes.cpp Objects/src/Button.cpp Objects/include/Button.h)
+        GraphicsManager/include/ObjectsAttributes.h GraphicsManager/src/ObjectsAttributes.cpp
+        Objects/src/Button.cpp Objects/include/Button.h
+        MySpaceManager.h)
 target_link_libraries(GeneticAlgorithm sfml-graphics sfml-audio)

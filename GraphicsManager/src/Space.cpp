@@ -1,13 +1,36 @@
 #include "../include/Space.h"
 
+Space Space::instance = Space();
+
+Space& Space::GetInstance() {
+    return instance;
+}
+
+Space::Space() {};
+
 Space::~Space() {
-    for (Object* object : objects)
-        delete object;
+    Clear();
 }
 
 Space& Space::operator<<(Object* object) {
-    objects.push_back(object);
+    if (object->attrs->GetString("id").empty()) {
+        object->attrs->SetString("id", "default_id_" + std::to_string(objects.size()));
+    }
+    objects.insert(std::make_pair(object->attrs->GetString("id"), object));
     return *this;
+}
+
+Object* Space::GetObjectById(const std::string &id) {
+    return GetInstance().objects.find(id)->second;
+}
+
+void Space::AddSpaceManager(SpaceManager* new_space_manager) {
+    space_manager = new_space_manager;
+}
+
+void Space::FillByTag(const std::string& tag) {
+    current_tag = tag;
+    need_to_refill_by_tag = true;
 }
 
 void Space::Start() {
@@ -18,7 +41,11 @@ void Space::Start() {
         window = new sf::RenderWindow(sf::VideoMode::getDesktopMode(), "");
     }
 
-    while (window->isOpen() && running) {
+    while (window->isOpen() && is_running) {
+        if (need_to_refill_by_tag) {
+            space_manager->FillByTag(current_tag);
+            need_to_refill_by_tag = false;
+        }
         sf::Event event{};
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
             window->close();
@@ -34,33 +61,35 @@ void Space::Start() {
 }
 
 void Space::Stop() {
-    running = false;
+    is_running = false;
 }
 
 void Space::Clear() {
-    for (Object* object : objects)
-        delete object;
+    for (const auto& object : objects)
+        delete object.second;
     objects.clear();
 }
 
 void Space::SaveParams() {
-    for (Object* object : objects)
-        object->SaveParams();
+    for (const auto& object : objects) {
+        object.second->SaveParams();
+    }
 }
 
 void Space::OnFrame() {
-    for (Object* object : objects) {
-        object->Timer();
-        object->OnFrame();
+    for (const auto& object : objects) {
+        object.second->Timer();
+        object.second->OnFrame();
     }
 }
 
 void Space::OnDraw(sf::RenderWindow& window) {
-    for (Object* object : objects)
-        object->OnDraw(window);
+    for (const auto& object : objects) {
+        object.second->OnDraw(window);
+    }
 }
-
 void Space::OnEvent(sf::Event& event, sf::RenderWindow& window) {
-    for (Object* object : objects)
-        object->OnEvent(event, window);
+    for (const auto& object : objects) {
+        object.second->OnEvent(event, window);
+    }
 }

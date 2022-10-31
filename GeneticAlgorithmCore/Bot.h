@@ -1,11 +1,4 @@
-//
-// Created by User on 01.10.2022.
-//
-
-#ifndef GENETICALGORITHM_BOT_H
-#define GENETICALGORITHM_BOT_H
-
-#endif //GENETICALGORITHM_BOT_H
+#pragma once
 
 #include <utility>
 #include <vector>

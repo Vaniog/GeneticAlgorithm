@@ -1,11 +1,7 @@
 //
 // Created by User on 01.10.2022.
 //
-
-#ifndef GENETICALGORITHM_SCENE_H
-#define GENETICALGORITHM_SCENE_H
-
-#endif //GENETICALGORITHM_SCENE_H
+#pragma once
 
 #include "Bot.h"
 
