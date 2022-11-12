@@ -24,6 +24,7 @@ class Button : public Object {
     bool text_defined = false;
     sf::Text* text;
     float char_size; // in pixels
+    uint32_t lines_in_text{};
     float out_thick; // in pixels
     sf::Font* font;
 public:

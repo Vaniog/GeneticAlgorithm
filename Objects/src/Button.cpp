@@ -41,6 +41,10 @@ Button::Button(const std::string& parse_str) {
         text->setFont(*font);
         text->setFillColor(sf::Color(attrs->GetColor("text_color")));
         text->setCharacterSize(static_cast<uint32_t>(char_size));
+        lines_in_text = 1;
+        for (uint32_t c : text->getString()) {
+            lines_in_text += (c == '\n');
+        }
         //width = text->getGlobalBounds().width;
         //height = text->getGlobalBounds().height;
         //rectangle->setSize(sf::Vector2f(text->getGlobalBounds().width, text->getGlobalBounds().height));
@@ -60,7 +64,7 @@ void Button::CorrectSize() const {
     }
     if (text_defined) {
         text->setScale(scale, scale);
-        float padding_y = char_size * scale - text->getGlobalBounds().height;
+        float padding_y = static_cast<float>(lines_in_text) * char_size * scale - text->getGlobalBounds().height;
         text->setPosition(pos_x - text->getGlobalBounds().width / 2,
                           pos_y - text->getGlobalBounds().height / 2 - padding_y);
     }
@@ -108,7 +112,7 @@ void Button::OnEvent(sf::Event& event, sf::RenderWindow& window) {
     }
 }
 
-ExitButton::ExitButton(const std::string& parse_str, Space& space) : Button(parse_str), space(space) {};
+ExitButton::ExitButton(const std::string& parse_str, Space& space) : Button(parse_str), space(space) {}
 
 void ExitButton::OnPress() {
     space.Stop();
