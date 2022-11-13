@@ -14,17 +14,23 @@ void ObjectsAttributes::ParseFromString(const std::string& parsing_string) {
         ParseFromFile(GetString("data_file_path"));
     }
 
+    SyncWithParents();
+}
+
+void ObjectsAttributes::SyncWithParents() {
+    std::map<std::string, std::string> parents_attrs;
+
     for (auto member : data) {
         std::string variable_name = member.first;
-        if (variable_name.find("parent_") != variable_name.npos) { // parent_size
+        if (variable_name.find("parent_") == 0) { // parent_size
             std::string parent_id = member.second;
-            variable_name.erase(0, 7);
             Object* parent = Space::GetObjectById(parent_id);
             if (parent == nullptr)
                 continue;
+            variable_name.erase(0, 7);
             for (auto attr : parent->attrs->data) {
                 if (attr.first.find(variable_name) == 0) {
-                    SetVariable("100%_" + attr.first, attr.second);
+                    parents_attrs.insert(attr);
                 }
             }
         }
@@ -34,17 +40,25 @@ void ObjectsAttributes::ParseFromString(const std::string& parsing_string) {
         std::string variable_name = member.first;
         std::string variable = member.second;
         if (variable[variable.size() - 1] == '%') {
-            if (data.find("100%_" + variable_name) == data.end()) {
+            if (parents_attrs.find(variable_name) == parents_attrs.end()) {
                 if (variable_name.find("_y") != variable_name.npos) {
-                    SetVariable("100%_" + variable_name, data.find("100%_size_y")->second);
+                    parents_attrs.insert(std::make_pair(variable_name,
+                                                        std::to_string(Space::GetObjectById("0")->GetPos().y)));
                 } else {
-                    SetVariable("100%_" + variable_name, data.find("100%_size_x")->second);
+                    parents_attrs.insert(std::make_pair(variable_name,
+                                                        std::to_string(Space::GetObjectById("0")->GetPos().x)));
                 }
             }
-            float hundred_percents_value = std::stof(GetString("100%_" + variable_name));
+            float hundred_percents_value = std::stof(parents_attrs.find(variable_name)->second);
             variable.erase(variable.size() - 1);
             variable = std::to_string(std::stof(variable) * hundred_percents_value / 100);
             SetVariable(variable_name, variable);
+        }
+    }
+
+    for (auto attr : parents_attrs) {
+        if (data.find(attr.first) == data.end()) {
+            data.insert(attr);
         }
     }
 
@@ -53,7 +67,6 @@ void ObjectsAttributes::ParseFromString(const std::string& parsing_string) {
     }
     std::cout << "==========\n";
 }
-
 
 void ObjectsAttributes::ParseFromFile(const std::string& file_name) {
     std::ifstream file(file_name);
@@ -187,7 +200,6 @@ uint32_t ObjectsAttributes::GetColor(const std::string& key) {
     uint32_t color = GetColorFromString(GetString(key));
     return color;
 }
-
 void ObjectsAttributes::SetString(const std::string& key, const std::string& x) {
     data[key] = x;
 }

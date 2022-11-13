@@ -19,6 +19,7 @@ public:
     [[maybe_unused]] void SetColor(const std::string& key, const std::string& x);
 private:
     void SetVariable(const std::string& variable_name, const std::string& variable);
+    void SyncWithParents();
 
     static std::string GetStringFromString(const std::string& parsing_string, uint32_t& iter);
     static uint32_t GetColorFromString(const std::string& str);

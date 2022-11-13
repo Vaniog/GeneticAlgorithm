@@ -13,6 +13,7 @@ Space::Space() {
         window = new sf::RenderWindow(sf::VideoMode::getDesktopMode(), "");
     }
     Object::default_object->SetSize(sf::Vector2f(window->getSize()));
+    Object::default_object->SetPos(sf::Vector2f(window->getSize()));
 };
 
 Space::~Space() {
