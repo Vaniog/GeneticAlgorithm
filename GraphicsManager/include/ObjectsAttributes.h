@@ -22,8 +22,6 @@ private:
 
     static std::string GetStringFromString(const std::string& parsing_string, uint32_t& iter);
     static uint32_t GetColorFromString(const std::string& str);
-    std::string GetParentName(const std::string& key) const;
-    std::string GetStringFromParent(const std::string& key) const;
 private:
     std::map<std::string, std::string> data;
 };

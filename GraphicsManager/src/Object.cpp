@@ -11,8 +11,9 @@ void Object::Timer() {
 }
 
 Object::Object(const std::string& parse_str) {
-    this->parse_str = parse_str;
-    attrs->ParseFromString(parse_str);
+    this->parse_str = "parent_size:0 parent_pos:0 ";
+    this->parse_str += parse_str;
+    attrs->ParseFromString(this->parse_str);
     id = attrs->GetString("id");
 
     size.x = attrs->GetFloat("size_x");

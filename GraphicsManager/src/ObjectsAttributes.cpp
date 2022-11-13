@@ -4,6 +4,7 @@
 
 void ObjectsAttributes::ParseFromString(const std::string& parsing_string) {
     uint32_t iter = 0;
+
     while (iter < parsing_string.size()) {
         std::string variable_name = GetStringFromString(parsing_string, iter);
         std::string variable = GetStringFromString(parsing_string, iter);
@@ -14,13 +15,45 @@ void ObjectsAttributes::ParseFromString(const std::string& parsing_string) {
     }
 
     for (auto member : data) {
-        std::string variable_name;
-        std::string variable;
-        if (variable_name.find("parent_") != variable_name.npos){
-
+        std::string variable_name = member.first;
+        if (variable_name.find("parent_") != variable_name.npos) { // parent_size
+            std::string parent_id = member.second;
+            variable_name.erase(0, 7);
+            Object* parent = Space::GetObjectById(parent_id);
+            if (parent == nullptr)
+                continue;
+            for (auto attr : parent->attrs->data) {
+                if (attr.first.find(variable_name) == 0) {
+                    SetVariable("100%_" + attr.first, attr.second);
+                }
+            }
         }
     }
+
+    for (auto member : data) {
+        std::string variable_name = member.first;
+        std::string variable = member.second;
+        if (variable[variable.size() - 1] == '%') {
+            if (data.find("100%_" + variable_name) == data.end()) {
+                if (variable_name.find("_y") != variable_name.npos) {
+                    SetVariable("100%_" + variable_name, data.find("100%_size_y")->second);
+                } else {
+                    SetVariable("100%_" + variable_name, data.find("100%_size_x")->second);
+                }
+            }
+            float hundred_percents_value = std::stof(GetString("100%_" + variable_name));
+            variable.erase(variable.size() - 1);
+            variable = std::to_string(std::stof(variable) * hundred_percents_value / 100);
+            SetVariable(variable_name, variable);
+        }
+    }
+
+    for (auto member : data) {
+        std::cout << member.first << " " << member.second << "\n";
+    }
+    std::cout << "==========\n";
 }
+
 
 void ObjectsAttributes::ParseFromFile(const std::string& file_name) {
     std::ifstream file(file_name);
@@ -33,7 +66,11 @@ void ObjectsAttributes::ParseFromFile(const std::string& file_name) {
 }
 
 void ObjectsAttributes::SetVariable(const std::string& variable_name, const std::string& variable) {
-    data.insert(std::make_pair(variable_name, variable));
+    if (data.find(variable_name) == data.end()) {
+        data.insert(std::make_pair(variable_name, variable));
+    } else {
+        data[variable_name] = variable;
+    }
 }
 
 bool IsSkipChar(const char& c) {
@@ -99,13 +136,13 @@ std::string ObjectsAttributes::GetStringFromString(const std::string& parsing_st
 }
 
 const std::string ObjectsAttributes::GetString(const std::string& key) const {
-    if (!GetParentName(key).empty()) {
-        return GetStringFromParent(key);
+    if (data.find("100%_" + key) != data.end()) {
+        return data.find("100%_" + key)->second;
     }
-    if (data.find(key) == data.end()) {
-        return "";
+    if (data.find(key) != data.end()) {
+        return data.find(key)->second;
     }
-    return data.find(key)->second;
+    return "";
 }
 
 [[maybe_unused]] uint32_t ObjectsAttributes::GetUint32(const std::string& key) {
@@ -116,7 +153,7 @@ const std::string ObjectsAttributes::GetString(const std::string& key) const {
     std::string str = data.find(key)->second;
     if (!str.empty()) {
         if (str[str.size() - 1] == '%') {
-            float hundred_percents_value = std::stoi(GetStringFromParent(key));
+            float hundred_percents_value = std::stof(GetString("100%_" + key));
             str.erase(str.size() - 1);
             x = static_cast<uint32_t>(std::stof(str) * hundred_percents_value / 100);
             SetUint32(key, x);
@@ -135,7 +172,7 @@ float ObjectsAttributes::GetFloat(const std::string& key) {
     std::string str = data.find(key)->second;
     if (!str.empty()) {
         if (str[str.size() - 1] == '%') {
-            float hundred_percents_value = std::stof(GetStringFromParent(key));
+            float hundred_percents_value = std::stof(GetString("100%_" + key));
             str.erase(str.size() - 1);
             x = std::stof(str) * hundred_percents_value / 100;
             SetFloat(key, x);
@@ -162,30 +199,4 @@ void ObjectsAttributes::SetString(const std::string& key, const std::string& x) 
 }
 [[maybe_unused]] void ObjectsAttributes::SetColor(const std::string& key, const std::string& x) {
     data[key] = x;
-}
-
-std::string ObjectsAttributes::GetParentName(const std::string& key) const {
-    std::string parent_name = "parent_" + key;
-    while (!parent_name.empty() && data.find(parent_name) == data.end()) { // example parent_pos_x -> parent_pos
-        while (!parent_name.empty() && parent_name[parent_name.size() - 1] != '_') {
-            parent_name.pop_back();
-        }
-        if (!parent_name.empty()) {
-            parent_name.pop_back();
-        }
-    }
-    return parent_name;
-}
-
-std::string ObjectsAttributes::GetStringFromParent(const std::string& key) const {
-    std::string parent_name = GetParentName(key);
-    if (parent_name.empty())
-        if (key.find("_y") != key.npos) {
-            return Space::GetObjectById("0")->attrs->GetString("size_y");
-        } else {
-            return Space::GetObjectById("0")->attrs->GetString("size_x");
-        }
-    else {
-        return Space::GetObjectById(GetString(parent_name))->attrs->GetString(key);
-    }
 }
