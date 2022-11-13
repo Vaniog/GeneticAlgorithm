@@ -4,3 +4,4 @@ lib
 SFML-2.5.1/
 CMakeFiles/
 cmake-build-release
+*.sh

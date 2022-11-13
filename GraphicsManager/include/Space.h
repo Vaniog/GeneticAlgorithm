@@ -13,7 +13,7 @@ private:
     Space(); // singleton private constructor
     Space(const Space&) {}; // singleton private copy constructor
     static Space instance; // singleton
-    SpaceManager *space_manager;
+    SpaceManager *space_manager = new SpaceManager();
 public:
     static Space& GetInstance();
     Space& operator=(const Space&) = delete;
@@ -31,7 +31,6 @@ public:
     void Start();
     void Stop();
     void Clear();
-    void SaveParams();
 
 private:
     void OnFrame();

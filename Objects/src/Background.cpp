@@ -1,5 +1,5 @@
 #include "../include/Background.h"
-Background::Background() {
+Background::Background() : Object(""){
     field.resize(amount_x * amount_y);
     Refill();
 }

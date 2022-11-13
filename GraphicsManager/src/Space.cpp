@@ -6,7 +6,7 @@ Space& Space::GetInstance() {
     return instance;
 }
 
-Space::Space() {};
+Space::Space() = default;
 
 Space::~Space() {
     Clear();
@@ -20,7 +20,10 @@ Space& Space::operator<<(Object* object) {
     return *this;
 }
 
-Object* Space::GetObjectById(const std::string &id) {
+Object* Space::GetObjectById(const std::string& id) {
+    if (id == "0") {
+        return Object::default_object;
+    }
     return GetInstance().objects.find(id)->second;
 }
 
@@ -41,15 +44,21 @@ void Space::Start() {
         window = new sf::RenderWindow(sf::VideoMode::getDesktopMode(), "");
     }
 
+    Object::default_object->SetSize(static_cast<sf::Vector2f>(window->getSize()));
+    for (auto object : objects){
+        object.second->RecountDefaults();
+    }
     while (window->isOpen() && is_running) {
         if (need_to_refill_by_tag) {
             space_manager->FillByTag(current_tag);
             need_to_refill_by_tag = false;
         }
+        Object::default_object->SetSize(static_cast<sf::Vector2f>(window->getSize()));
         sf::Event event{};
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
             window->close();
         }
+
         window->pollEvent(event);
         window->clear();
 
@@ -58,6 +67,7 @@ void Space::Start() {
         OnDraw(*window);
         window->display();
     }
+
 }
 
 void Space::Stop() {
@@ -68,12 +78,6 @@ void Space::Clear() {
     for (const auto& object : objects)
         delete object.second;
     objects.clear();
-}
-
-void Space::SaveParams() {
-    for (const auto& object : objects) {
-        object.second->SaveParams();
-    }
 }
 
 void Space::OnFrame() {
@@ -88,6 +92,7 @@ void Space::OnDraw(sf::RenderWindow& window) {
         object.second->OnDraw(window);
     }
 }
+
 void Space::OnEvent(sf::Event& event, sf::RenderWindow& window) {
     for (const auto& object : objects) {
         object.second->OnEvent(event, window);

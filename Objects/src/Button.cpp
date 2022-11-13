@@ -1,16 +1,6 @@
 #include "../include/Button.h"
 
-Button::Button(const std::string& parse_str) {
-    attrs = new ObjectsAttributes;
-    attrs->hundred_percents_value = static_cast<float>(window_width);
-    attrs->ParseFromString(parse_str);
-
-    width = attrs->GetFloat("width");
-    height = attrs->GetFloat("height");
-
-    pos_x = attrs->GetFloat("pos_x");
-    pos_y = attrs->GetFloat("pos_y");
-
+Button::Button(const std::string& parse_str) : Object(parse_str) {
     char_size = attrs->GetFloat("char_size");
     out_thick = attrs->GetFloat("out_thick");
 
@@ -21,11 +11,11 @@ Button::Button(const std::string& parse_str) {
         texture->loadFromFile(attrs->GetString("image_path"));
         float image_width = static_cast<float>(texture->getSize().x);
         float image_height = static_cast<float>(texture->getSize().y);
-        size_scale = width / image_width;
-        height = width * image_height / image_width;
+        size_scale = size.x / image_width;
+        size.y = size.x * image_height / image_width;
         sprite->setTexture(*texture);
     } else {
-        rectangle = new sf::RectangleShape(sf::Vector2f(width - 2 * out_thick, height - 2 * out_thick));
+        rectangle = new sf::RectangleShape(sf::Vector2f(size.x - 2 * out_thick, size.y - 2 * out_thick));
         rectangle->setOutlineColor(sf::Color(attrs->GetColor("out_color")));
         rectangle->setFillColor(sf::Color(attrs->GetColor("fill_color")));
         rectangle->setOutlineThickness(out_thick);
@@ -45,8 +35,8 @@ Button::Button(const std::string& parse_str) {
         for (uint32_t c : text->getString()) {
             lines_in_text += (c == '\n');
         }
-        //width = text->getGlobalBounds().width;
-        //height = text->getGlobalBounds().height;
+        //size.x = text->getGlobalBounds().width;
+        //size.y = text->getGlobalBounds().height;
         //rectangle->setSize(sf::Vector2f(text->getGlobalBounds().width, text->getGlobalBounds().height));
     }
 
@@ -56,17 +46,17 @@ Button::Button(const std::string& parse_str) {
 void Button::CorrectSize() const {
     if (image_defined) {
         sprite->setScale(size_scale * scale, size_scale * scale);
-        sprite->setPosition(pos_x - width * scale / 2, pos_y - height * scale / 2);
+        sprite->setPosition(pos.x - size.x * scale / 2, pos.y - size.y * scale / 2);
     } else {
         rectangle->setScale(scale, scale);
-        rectangle->setPosition(pos_x - width * scale / 2,
-                               pos_y - height * scale / 2);
+        rectangle->setPosition(pos.x - size.x * scale / 2,
+                               pos.y - size.y * scale / 2);
     }
     if (text_defined) {
         text->setScale(scale, scale);
         float padding_y = static_cast<float>(lines_in_text) * char_size * scale - text->getGlobalBounds().height;
-        text->setPosition(pos_x - text->getGlobalBounds().width / 2,
-                          pos_y - text->getGlobalBounds().height / 2 - padding_y);
+        text->setPosition(pos.x - text->getGlobalBounds().width / 2,
+                          pos.y - text->getGlobalBounds().height / 2 - padding_y);
     }
 }
 
@@ -89,10 +79,10 @@ void Button::OnDraw(sf::RenderWindow& window) {
 void Button::OnEvent(sf::Event& event, sf::RenderWindow& window) {
     if (event.type == sf::Event::MouseMoved || event.type == sf::Event::MouseButtonPressed) {
         sf::Vector2<float> mouse = static_cast<sf::Vector2f>(sf::Mouse::getPosition(window));
-        if (mouse.x >= pos_x - width / 2
-                && mouse.x <= pos_x + width / 2
-                && mouse.y >= pos_y - height / 2
-                && mouse.y <= pos_y + height / 2) {
+        if (mouse.x >= pos.x - size.x / 2
+                && mouse.x <= pos.x + size.x / 2
+                && mouse.y >= pos.y - size.y / 2
+                && mouse.y <= pos.y + size.y / 2) {
             if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
                 scale = 0.85;
                 was_pressed = true;

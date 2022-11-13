@@ -1,4 +1,5 @@
 #include "../include/ObjectsAttributes.h"
+#include "../include/Space.h"
 #include <fstream>
 
 void ObjectsAttributes::ParseFromString(const std::string& parsing_string) {
@@ -90,15 +91,22 @@ std::string ObjectsAttributes::GetStringFromString(const std::string& parsing_st
     return str;
 }
 
-const std::string& ObjectsAttributes::GetString(const std::string& key) {
-    return data[key];
+const std::string ObjectsAttributes::GetString(const std::string& key) const {
+    if (data.find(key) == data.end()) {
+        return "";
+    }
+    return data.find(key)->second;
 }
 
-uint32_t ObjectsAttributes::GetUint32(const std::string& key) {
+[[maybe_unused]] uint32_t ObjectsAttributes::GetUint32(const std::string& key) const {
     uint32_t x = 0;
-    std::string str = data[key];
+    if (data.find(key) == data.end()) {
+        return 0;
+    }
+    std::string str = data.find(key)->second;
     if (!str.empty()) {
         if (str[str.size() - 1] == '%') {
+            float hundred_percents_value = GetUint32(key);
             str.erase(str.size() - 1);
             x = static_cast<uint32_t>(std::stof(str) * hundred_percents_value / 100);
         } else {
@@ -108,11 +116,15 @@ uint32_t ObjectsAttributes::GetUint32(const std::string& key) {
     return x;
 }
 
-float ObjectsAttributes::GetFloat(const std::string& key) {
+float ObjectsAttributes::GetFloat(const std::string& key) const {
     float x = 0;
-    std::string str = data[key];
+    if (data.find(key) == data.end()) {
+        return 0;
+    }
+    std::string str = data.find(key)->second;
     if (!str.empty()) {
         if (str[str.size() - 1] == '%') {
+            float hundred_percents_value = GetFloatFromParent(key);
             str.erase(str.size() - 1);
             x = std::stof(str) * hundred_percents_value / 100;
         } else {
@@ -122,20 +134,58 @@ float ObjectsAttributes::GetFloat(const std::string& key) {
     return x;
 }
 
-uint32_t ObjectsAttributes::GetColor(const std::string& key) {
+uint32_t ObjectsAttributes::GetColor(const std::string& key) const {
     return GetColorFromString(GetString(key));
 }
 
 void ObjectsAttributes::SetString(const std::string& key, const std::string& x) {
     data[key] = x;
 }
-void ObjectsAttributes::SetUint32(const std::string& key, const uint32_t& x) {
+[[maybe_unused]] void ObjectsAttributes::SetUint32(const std::string& key, const uint32_t& x) {
     data[key] = std::to_string(x);
 }
-void ObjectsAttributes::SetFloat(const std::string& key, const float& x) {
+[[maybe_unused]] void ObjectsAttributes::SetFloat(const std::string& key, const float& x) {
     data[key] = std::to_string(x);
 }
-void ObjectsAttributes::SetColor(const std::string& key, const std::string& x) {
+[[maybe_unused]] void ObjectsAttributes::SetColor(const std::string& key, const std::string& x) {
     data[key] = x;
 }
 
+float ObjectsAttributes::GetFloatFromParent(const std::string& key) const {
+    std::string parent_name = "parent_" + key;
+    while (!parent_name.empty() && GetString(parent_name).empty()) { // example parent_pos_x -> parent_pos
+        while (!parent_name.empty() && parent_name[parent_name.size() - 1] != '_') {
+            parent_name.pop_back();
+        }
+        if (!parent_name.empty())
+            parent_name.pop_back();
+    }
+    if (parent_name == "")
+        if (key.find("_y") != key.npos) {
+            return Space::GetObjectById("0")->attrs->GetFloat("size_y");
+        } else {
+            return Space::GetObjectById("0")->attrs->GetFloat("size_x");
+        }
+    else {
+        return Space::GetObjectById(parent_name)->attrs->GetFloat(key);
+    }
+}
+
+uint32_t ObjectsAttributes::GetUint32FromParent(const std::string& key) const {
+    std::string parent_name = "parent_" + key;
+    while (!parent_name.empty() && GetString(parent_name).empty()) { // example parent_pos_x -> parent_pos
+        while (parent_name[parent_name.size() - 1] != '_') {
+            parent_name.pop_back();
+        }
+        parent_name.pop_back();
+    }
+    if (parent_name == "") {
+        if (key.find("_y") != key.npos) {
+            return Space::GetObjectById("0")->attrs->GetUint32("size_y");
+        } else {
+            return Space::GetObjectById("0")->attrs->GetUint32("size_x");
+        }
+    } else {
+        return Space::GetObjectById(parent_name)->attrs->GetUint32(key);
+    }
+}

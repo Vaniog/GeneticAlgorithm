@@ -6,11 +6,26 @@
 #include "../../GraphicsManager/include/Space.h"
 
 class Button : public Object {
-    float width; // in pixels
-    float height; // in pixels
-
-    float pos_x; // in pixels
-    float pos_y; // in pixels
+    /*
+     * ButtonOld attrs:
+     * data_file_path
+     *
+     * width
+     * height
+     * pos_x
+     * pos_y
+     *
+     * text_string
+     * text_color
+     * font_path
+     * char_size
+     *
+     * fill_color
+     * out_thickness
+     * out_color
+     *
+     * image_path
+    */
 
     float size_scale = 1; // for sprite
     float scale = 1;
