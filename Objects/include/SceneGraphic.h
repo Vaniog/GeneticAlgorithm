@@ -38,8 +38,7 @@ public:
     static const int MAX_STATS_SIZE;
     std::vector<SceneStats> scene_stats;
 
-    SceneGraphic(float pos_x_percents, float pos_y_percents,
-                 float size_x_percents);
+    SceneGraphic(const std::string& parse_str);
 
     sf::Texture field_texture;
     sf::Texture wall_texture;
@@ -49,12 +48,10 @@ public:
 
     void LoadTextures();
 
-    sf::Vector2<float> pos;
-    float size{}; // of tile
+    float size_of_tile{}; // of tile
     float font_border_size{};
 
-    void LoadSizes(float pos_x_percents, float pos_y_percents,
-                   float size_x_percents);
+    void LoadSizes();
 
     void BotsDownload();
     void BotsUpload();

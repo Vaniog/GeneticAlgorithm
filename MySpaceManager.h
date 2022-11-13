@@ -31,7 +31,8 @@ private:
                                     "text_string:'menu'  char_size:2.5% "
                                     "font_path:'../Resources/Fonts/statsFont.ttf' "
                                     "text_color:#ca3299 ", *this);
-            space << new SceneGraphic(0.5, 0.5, 0.5);
+            space << new SceneGraphic("size_y: 100% "
+                                      "pos_x:50% pos_y:50%");
         }
     }
 };

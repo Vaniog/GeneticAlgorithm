@@ -35,8 +35,8 @@ Button::Button(const std::string& parse_str) : Object(parse_str) {
         for (uint32_t c : text->getString()) {
             lines_in_text += (c == '\n');
         }
-        //size.x = text->getGlobalBounds().width;
-        //size.y = text->getGlobalBounds().height;
+        //size_of_tile.x = text->getGlobalBounds().width;
+        //size_of_tile.y = text->getGlobalBounds().height;
         //rectangle->setSize(sf::Vector2f(text->getGlobalBounds().width, text->getGlobalBounds().height));
     }
 

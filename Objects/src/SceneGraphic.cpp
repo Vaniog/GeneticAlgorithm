@@ -1,7 +1,7 @@
 #include "../include/SceneGraphic.h"
 
-SceneGraphic::SceneGraphic(float pos_x_percents, float pos_y_percents, float size_x_percents) {
-    LoadSizes(pos_x_percents, pos_y_percents, size_x_percents);
+SceneGraphic::SceneGraphic(const std::string& parse_str) : Object(parse_str) {
+    LoadSizes();
     LoadTextures();
     LoadScene();
 }
@@ -25,12 +25,13 @@ void SceneGraphic::LoadTextures() {
     beast_health.setFillColor(sf::Color::White);
 }
 
-void SceneGraphic::LoadSizes(float pos_x_percents, float pos_y_percents, float size_x_percents) {
-    size = size_x_percents * (float)window_width / (float)width;
-    pos.x = pos_x_percents * (float)window_width - size * (float)width / 2;
-    pos.y = pos_y_percents * (float)window_height - size * (float)height / 2;
-    font_border_size = size * (float)(FONT_BORDER) / (float)(IMAGE_SIZE);
-    beast_health.setCharacterSize(static_cast<uint32_t>((size) - 2 * font_border_size));
+void SceneGraphic::LoadSizes() {
+    size.x = size.y;
+    size_of_tile = size.x / (float)width;
+    pos.x -= size.x / 2;
+    pos.y -= size.y / 2;
+    font_border_size = size_of_tile * (float)(FONT_BORDER) / (float)(IMAGE_SIZE);
+    beast_health.setCharacterSize(static_cast<uint32_t>((size_of_tile) - 2 * font_border_size));
 }
 
 void SceneGraphic::BotsDownload() {
@@ -113,13 +114,13 @@ void SceneGraphic::OnDraw(sf::RenderWindow& window) {
 void SceneGraphic::PickPixel(const int& x, const int& y) {
     auto xf = static_cast<float>(x);
     auto yf = static_cast<float>(y);
-    field_tile.setPosition(pos.x + xf * size, pos.y + yf * size);
-    beast_health.setPosition(pos.x + xf * size + font_border_size, pos.y + yf * size + font_border_size);
+    field_tile.setPosition(pos.x + xf * size_of_tile, pos.y + yf * size_of_tile);
+    beast_health.setPosition(pos.x + xf * size_of_tile + font_border_size, pos.y + yf * size_of_tile + font_border_size);
 }
 
 void SceneGraphic::DrawField(sf::RenderWindow& window) {
     field_tile.setTexture(field_texture);
-    field_tile.setScale(size / (float)IMAGE_SIZE, size / (float)IMAGE_SIZE);
+    field_tile.setScale(size_of_tile / (float)IMAGE_SIZE, size_of_tile / (float)IMAGE_SIZE);
     for (int x = 0; x < width; x++) {
         for (int y = 0; y < height; y++) {
             PickPixel(x, y);
@@ -174,9 +175,9 @@ void SceneGraphic::DrawStats(sf::RenderWindow& window) {
     }
 
     stats_text.setString(stats_string);
-    stats_text.setPosition(pos.x + (width + 1) * size * draw_field_on, pos.y);
+    stats_text.setPosition(pos.x + (width + 1) * size_of_tile * draw_field_on, pos.y);
     stats_text.setFont(stats_font);
-    stats_text.setCharacterSize(STATS_FONT_SIZE * size);
+    stats_text.setCharacterSize(STATS_FONT_SIZE * size_of_tile);
 
     window.draw(stats_text);
 }
