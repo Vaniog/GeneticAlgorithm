@@ -1,23 +1,17 @@
 #include "../include/Object.h"
 
-const unsigned int Object::window_width = sf::VideoMode::getDesktopMode().width;
-const unsigned int Object::window_height = sf::VideoMode::getDesktopMode().height;
-
 Object* Object::default_object = new Object("id:0");
 
 void Object::Timer() {
     auto cur = std::chrono::steady_clock::now();
     auto diff = cur - old;
-    delta_time = std::chrono::duration_cast<std::chrono::milliseconds>(diff).count();
+    delta_time = static_cast<float>(std::chrono::duration_cast<std::chrono::microseconds>(diff).count())
+            / 1000;
     old = cur;
 }
 
 Object::Object(const std::string& parse_str) {
     this->parse_str = parse_str;
-    RecountDefaults();
-}
-
-void Object::RecountDefaults() {
     attrs->ParseFromString(parse_str);
     id = attrs->GetString("id");
 
@@ -30,9 +24,11 @@ void Object::RecountDefaults() {
 [[maybe_unused]] const sf::Vector2f Object::GetSize() const {
     return size;
 }
+
 [[maybe_unused]] const sf::Vector2f Object::GetPos() const {
     return pos;
 }
+
 [[maybe_unused]] const std::string Object::GetID() const {
     return id;
 }

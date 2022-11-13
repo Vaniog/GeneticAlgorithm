@@ -1,7 +1,7 @@
 #include "../include/Button.h"
 
 Button::Button(const std::string& parse_str) : Object(parse_str) {
-    char_size = attrs->GetFloat("char_size");
+    char_size_y = attrs->GetFloat("char_size_y");
     out_thick = attrs->GetFloat("out_thick");
 
     if (!attrs->GetString("image_path").empty()) {
@@ -16,8 +16,8 @@ Button::Button(const std::string& parse_str) : Object(parse_str) {
         sprite->setTexture(*texture);
     } else {
         rectangle = new sf::RectangleShape(sf::Vector2f(size.x - 2 * out_thick, size.y - 2 * out_thick));
-        rectangle->setOutlineColor(sf::Color(attrs->GetColor("out_color")));
-        rectangle->setFillColor(sf::Color(attrs->GetColor("fill_color")));
+        rectangle->setOutlineColor(sf::Color(attrs->GetColor("color_out")));
+        rectangle->setFillColor(sf::Color(attrs->GetColor("color_fill")));
         rectangle->setOutlineThickness(out_thick);
         rectangle->setOrigin(-out_thick, -out_thick);
     }
@@ -29,8 +29,8 @@ Button::Button(const std::string& parse_str) : Object(parse_str) {
         font->loadFromFile(attrs->GetString("font_path"));
         text->setString(attrs->GetString("text_string"));
         text->setFont(*font);
-        text->setFillColor(sf::Color(attrs->GetColor("text_color")));
-        text->setCharacterSize(static_cast<uint32_t>(char_size));
+        text->setFillColor(sf::Color(attrs->GetColor("color_text")));
+        text->setCharacterSize(static_cast<uint32_t>(char_size_y));
         lines_in_text = 1;
         for (uint32_t c : text->getString()) {
             lines_in_text += (c == '\n');
@@ -54,7 +54,7 @@ void Button::CorrectSize() const {
     }
     if (text_defined) {
         text->setScale(scale, scale);
-        float padding_y = static_cast<float>(lines_in_text) * char_size * scale - text->getGlobalBounds().height;
+        float padding_y = static_cast<float>(lines_in_text) * char_size_y * scale - text->getGlobalBounds().height;
         text->setPosition(pos.x - text->getGlobalBounds().width / 2,
                           pos.y - text->getGlobalBounds().height / 2 - padding_y);
     }
@@ -79,6 +79,8 @@ void Button::OnDraw(sf::RenderWindow& window) {
 void Button::OnEvent(sf::Event& event, sf::RenderWindow& window) {
     if (event.type == sf::Event::MouseMoved || event.type == sf::Event::MouseButtonPressed) {
         sf::Vector2<float> mouse = static_cast<sf::Vector2f>(sf::Mouse::getPosition(window));
+        mouse.x *= Space::GetObjectById("0")->attrs->GetFloat("size_x") / window.getSize().x;
+        mouse.y *= Space::GetObjectById("0")->attrs->GetFloat("size_y") / window.getSize().y;
         if (mouse.x >= pos.x - size.x / 2
                 && mouse.x <= pos.x + size.x / 2
                 && mouse.y >= pos.y - size.y / 2

@@ -6,7 +6,14 @@ Space& Space::GetInstance() {
     return instance;
 }
 
-Space::Space() = default;
+Space::Space() {
+    if (!sf::VideoMode::getFullscreenModes().empty()) {
+        window = new sf::RenderWindow(sf::VideoMode::getDesktopMode(), "", sf::Style::Fullscreen);
+    } else {
+        window = new sf::RenderWindow(sf::VideoMode::getDesktopMode(), "");
+    }
+    Object::default_object->SetSize(sf::Vector2f(window->getSize()));
+};
 
 Space::~Space() {
     Clear();
@@ -37,23 +44,12 @@ void Space::FillByTag(const std::string& tag) {
 }
 
 void Space::Start() {
-    sf::RenderWindow* window;
-    if (!sf::VideoMode::getFullscreenModes().empty()) {
-        window = new sf::RenderWindow(sf::VideoMode::getDesktopMode(), "", sf::Style::Fullscreen);
-    } else {
-        window = new sf::RenderWindow(sf::VideoMode::getDesktopMode(), "");
-    }
-
-    Object::default_object->SetSize(static_cast<sf::Vector2f>(window->getSize()));
-    for (auto object : objects){
-        object.second->RecountDefaults();
-    }
     while (window->isOpen() && is_running) {
         if (need_to_refill_by_tag) {
             space_manager->FillByTag(current_tag);
             need_to_refill_by_tag = false;
         }
-        Object::default_object->SetSize(static_cast<sf::Vector2f>(window->getSize()));
+
         sf::Event event{};
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
             window->close();
@@ -67,7 +63,6 @@ void Space::Start() {
         OnDraw(*window);
         window->display();
     }
-
 }
 
 void Space::Stop() {
@@ -98,3 +93,4 @@ void Space::OnEvent(sf::Event& event, sf::RenderWindow& window) {
         object.second->OnEvent(event, window);
     }
 }
+

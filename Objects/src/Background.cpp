@@ -1,5 +1,5 @@
 #include "../include/Background.h"
-Background::Background() : Object(""){
+Background::Background(const std::string& parse_str) : Object(parse_str) {
     field.resize(amount_x * amount_y);
     Refill();
 }
@@ -14,8 +14,8 @@ void Background::OnFrame() {
 }
 
 void Background::Refill() {
-    float size_x = (float)window_width / amount_x + 1;
-    float size_y = (float)window_height / amount_y + 1;
+    float size_x = size.x / amount_x + 1;
+    float size_y = size.y / amount_y + 1;
     for (int x = 0; x < amount_x; x++) {
         for (int y = 0; y < amount_y; y++) {
             sf::RectangleShape rect;
@@ -29,7 +29,7 @@ void Background::Refill() {
     }
 }
 
-void ::Background::OnDraw(sf::RenderWindow& window) {
+void Background::OnDraw(sf::RenderWindow& window) {
     for (auto& rect : field)
         window.draw(rect);
 }

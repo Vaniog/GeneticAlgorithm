@@ -10,7 +10,7 @@ void SpaceManager::FillByTag(const std::string& tag) {
                         "pos_x:50%  pos_y:30% "
                         "out_color:#ca3299  fill_color:#ffffffef  out_thick:1% "
                         "text_string:'Override SpaceManager::FillByTag in your own class\nplease'  "
-                        "char_size:4% "
+                        "char_size_y:4% "
                         "font_path:'../Resources/Fonts/statsFont.ttf' "
-                        "text_color:#ca3299 ");
+                        "color_text:#ca3299 ");
 }

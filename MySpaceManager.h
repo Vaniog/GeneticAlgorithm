@@ -11,26 +11,27 @@ private:
         Space& space = Space::GetInstance();
         space.Clear();
         if (tag == "MENU") {
-            space << new Background();
+            space << new Background("size_x:100% size_y:100%");
             space << new ExitButton("size_x:6% size_y:5% "
+                                    "id:exit_button "
                                     "pos_x:5%  pos_y:3% "
-                                    "out_color:#ca3299  fill_color:#ffffffef  out_thick:0.3% "
-                                    "text_string:'exit'  char_size:2.5% "
+                                    "color_out:#ca3299  color_fill:#ffffffef  out_thick:0.3% "
+                                    "text_string:'exit'  char_size_y:4% "
                                     "font_path:'../Resources/Fonts/statsFont.ttf' "
-                                    "text_color:#ca3299 ", space);
-            space << new StartButton("size_x:25% size_y:20% "
+                                    "color_text:#ca3299 ", space);
+            space << new StartButton("size_x:30% size_y:20% "
                                      "pos_x:50%  pos_y:50% "
-                                     "out_color:#ca3299  fill_color:#ffffffef  out_thick:1% "
-                                     "text_string:'play'  char_size:8% "
-                                     "font_path:'../Resources/Fonts/statsFont.ttf' "
-                                     "text_color:#ca3299 ", *this);
+                                     "parent_color:exit_button "
+                                     "out_thick:1% "
+                                     "text_string:'play'  char_size_y:15% "
+                                     "font_path:'../Resources/Fonts/statsFont.ttf' ", *this);
         } else if (tag == "PLAY") {
             space << new MenuButton("size_x:6% size_y:5% "
                                     "pos_x:5%  pos_y:3% "
-                                    "out_color:#ca3299  fill_color:#ffffffef  out_thick:0.3% "
-                                    "text_string:'menu'  char_size:2.5% "
+                                    "color_out:#ca3299  color_fill:#ffffffef  out_thick:0.3% "
+                                    "text_string:'menu'  char_size_y:4% "
                                     "font_path:'../Resources/Fonts/statsFont.ttf' "
-                                    "text_color:#ca3299 ", *this);
+                                    "color_text:#ca3299 ", *this);
             space << new SceneGraphic("size_y: 100% "
                                       "pos_x:50% pos_y:50%");
         }

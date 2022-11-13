@@ -4,13 +4,14 @@
 
 class ObjectsAttributes {
 public:
+    ObjectsAttributes() = default;
     void ParseFromString(const std::string& parsing_string);
     void ParseFromFile(const std::string& file_name);
 public:
     [[maybe_unused]] const std::string GetString(const std::string& key) const;
-    [[maybe_unused]] uint32_t GetUint32(const std::string& key) const;
-    [[maybe_unused]] float GetFloat(const std::string& key) const;
-    [[maybe_unused]] uint32_t GetColor(const std::string& key) const;
+    [[maybe_unused]] uint32_t GetUint32(const std::string& key);
+    [[maybe_unused]] float GetFloat(const std::string& key);
+    [[maybe_unused]] uint32_t GetColor(const std::string& key);
 
     [[maybe_unused]] void SetString(const std::string& key, const std::string& x);
     [[maybe_unused]] void SetUint32(const std::string& key, const uint32_t& x);
@@ -21,8 +22,8 @@ private:
 
     static std::string GetStringFromString(const std::string& parsing_string, uint32_t& iter);
     static uint32_t GetColorFromString(const std::string& str);
-    float GetFloatFromParent(const std::string& key) const;
-    uint32_t GetUint32FromParent(const std::string& key) const;
+    std::string GetParentName(const std::string& key) const;
+    std::string GetStringFromParent(const std::string& key) const;
 private:
     std::map<std::string, std::string> data;
 };

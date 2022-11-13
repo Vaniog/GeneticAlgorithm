@@ -9,9 +9,9 @@ class Background : public Object {
     const int amount_y = 20;
     std::vector<sf::RectangleShape> field;
 public:
-    Background();
+    Background(const std::string& parse_str);
 
-    long time_pass = 0;
+    float time_pass = 0;
     int step = 0;
 
     void OnFrame() override;

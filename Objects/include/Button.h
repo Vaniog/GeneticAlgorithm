@@ -10,19 +10,20 @@ class Button : public Object {
      * ButtonOld attrs:
      * data_file_path
      *
-     * width
-     * height
+     * id
+     * size_x
+     * pos_x
      * pos_x
      * pos_y
      *
      * text_string
-     * text_color
+     * color_text
      * font_path
-     * char_size
+     * char_size_y
      *
-     * fill_color
+     * color_fill
+     * color_out
      * out_thickness
-     * out_color
      *
      * image_path
     */
@@ -38,7 +39,7 @@ class Button : public Object {
 
     bool text_defined = false;
     sf::Text* text;
-    float char_size; // in pixels
+    float char_size_y; // in pixels
     uint32_t lines_in_text{};
     float out_thick; // in pixels
     sf::Font* font;
