@@ -1,4 +1,4 @@
-name: deliver-windows
+name: deploy
 
 on:
   workflow_dispatch:
@@ -38,8 +38,8 @@ jobs:
         choco install ninja cmake
         ninja --version
         cmake --version        
-        wget https://github.com/SFML/SFML/releases/download/2.5.1/${{ matrix.config.sfml_build }}.zip
-        7z x ${{ matrix.config.sfml_build }}
+        curl -L https://github.com/SFML/SFML/releases/download/2.5.1/${{ matrix.config.sfml_build }}.zip > SFML.zip
+        7z x SFML.zip
         mv SFML* C:\\SFML
         
     - name: Install dependecies on linux
@@ -59,23 +59,22 @@ jobs:
           -B . \
           -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }} \
           -G "${{ matrix.config.generators }}" \
-          -DCMAKE_INSTALL_PREFIX:PATH=instdir
+          -DCMAKE_INSTALL_PREFIX:PATH=instdir 
     - name: Build
       shell: bash
       run: cmake --build . --config ${{ matrix.config.build_type }}
-
         
     - name: Pack (Windows)
       if: startsWith(matrix.config.os, 'windows')
       shell: bash
       run: |
-        ${{ matrix.config.archiver }} ${{ matrix.config.artifact }} GeneticAlgorithm.exe Resources
+        ${{ matrix.config.archiver }} ${{ matrix.config.artifact }} GeneticAlgorithm.exe Resources/
       
     - name: Pack (Linux)
       if: startsWith(matrix.config.os, 'ubuntu')
       shell: bash
       run: |
-        ${{ matrix.config.archiver }} ${{ matrix.config.artifact }} GeneticAlgorithm Resources
+        ${{ matrix.config.archiver }} ${{ matrix.config.artifact }} GeneticAlgorithm Resources/
         
     - name: Upload
       shell: bash
