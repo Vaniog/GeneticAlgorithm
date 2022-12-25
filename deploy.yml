@@ -1,0 +1,89 @@
+name: deliver-windows
+
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  build:
+    name: build-windows
+    runs-on: ${{ matrix.config.os }} # будет запускаться по очереди на всех типах машин
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+        - name: "Windows Latest MinGW"
+          os: windows-latest
+          artifact: "windows.zip"
+          build_type: "Release"
+          cc: "gcc"
+          cxx: "g++"
+          archiver: "7z a"
+          generators: "Ninja"
+          sfml_build: SFML-2.5.1-windows-gcc-7.3.0-mingw-64-bit
+        - name: "Linux"
+          os: ubuntu-latest
+          artifact: "linux.zip"
+          build_type: "Release"
+          cc: "gcc"
+          cxx: "g++"
+          archiver: "zip"
+          generators: "Ninja"
+    steps:
+    - uses: actions/checkout@v2
+   
+    - name: Install dependencies on windows
+      if: startsWith(matrix.config.os, 'windows')
+      run: |
+        choco install ninja cmake
+        ninja --version
+        cmake --version        
+        wget https://github.com/SFML/SFML/releases/download/2.5.1/${{ matrix.config.sfml_build }}.zip
+        7z x ${{ matrix.config.sfml_build }}
+        mv SFML* C:\\SFML
+        
+    - name: Install dependecies on linux
+      if: startsWith(matrix.config.os, 'ubuntu')
+      run: |
+        sudo apt-get install ninja-build libsfml-dev
+        ninja --version
+        cmake --version        
+    
+    - name: Configure
+      shell: bash
+      run: |
+        mkdir build
+        mkdir instdir
+        cmake \
+          -S . \
+          -B . \
+          -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }} \
+          -G "${{ matrix.config.generators }}" \
+          -DCMAKE_INSTALL_PREFIX:PATH=instdir
+    - name: Build
+      shell: bash
+      run: cmake --build . --config ${{ matrix.config.build_type }}
+
+        
+    - name: Pack (Windows)
+      if: startsWith(matrix.config.os, 'windows')
+      shell: bash
+      run: |
+        ${{ matrix.config.archiver }} ${{ matrix.config.artifact }} GeneticAlgorithm.exe Resources
+      
+    - name: Pack (Linux)
+      if: startsWith(matrix.config.os, 'ubuntu')
+      shell: bash
+      run: |
+        ${{ matrix.config.archiver }} ${{ matrix.config.artifact }} GeneticAlgorithm Resources
+        
+    - name: Upload
+      shell: bash
+      run: |
+        PRETTY_DATE=$(git log -1 --format="%ad" --date=format:"%Y.%m.%d-%T")
+        
+        curl -X POST https://content.dropboxapi.com/2/files/upload \
+          --header "Authorization: Bearer ${{ secrets.DROPBOX_TOKEN }}" \
+          --header "Dropbox-API-Arg: {\"path\": \"/builds/$PRETTY_DATE (${{ github.event.head_commit.message }})/${{ matrix.config.artifact }}\"}" \
+          --header "Content-Type: application/octet-stream" \
+          --data-binary @${{ matrix.config.artifact }}
