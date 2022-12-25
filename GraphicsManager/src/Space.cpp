@@ -8,7 +8,7 @@ Space& Space::GetInstance() {
 
 Space::Space() {
     if (!sf::VideoMode::getFullscreenModes().empty()) {
-        window = new sf::RenderWindow(sf::VideoMode::getDesktopMode(), "", sf::Style::Fullscreen);
+        window = new sf::RenderWindow(sf::VideoMode::getDesktopMode(), "");
     } else {
         window = new sf::RenderWindow(sf::VideoMode::getDesktopMode(), "");
     }

@@ -61,11 +61,6 @@ void ObjectsAttributes::SyncWithParents() {
             data.insert(attr);
         }
     }
-
-    for (auto member : data) {
-        std::cout << member.first << " " << member.second << "\n";
-    }
-    std::cout << "==========\n";
 }
 
 void ObjectsAttributes::ParseFromFile(const std::string& file_name) {
