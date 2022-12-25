@@ -40,7 +40,7 @@ jobs:
         cmake --version        
         curl -L https://github.com/SFML/SFML/releases/download/2.5.1/${{ matrix.config.sfml_build }}.zip > SFML.zip
         7z x SFML.zip
-        mv SFML* C:\\SFML
+        mv SFML-2.5.1 C:\\SFML
         
     - name: Install dependecies on linux
       if: startsWith(matrix.config.os, 'ubuntu')
@@ -74,6 +74,7 @@ jobs:
       if: startsWith(matrix.config.os, 'ubuntu')
       shell: bash
       run: |
+        ls -R
         ${{ matrix.config.archiver }} ${{ matrix.config.artifact }} GeneticAlgorithm Resources/
         
     - name: Upload
