@@ -1,0 +1,58 @@
+name: build
+
+on:
+  workflow_dispatch:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    name: build
+    runs-on: ${{ matrix.config.os }} # run on different machines
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+        - name: "Windows Latest MinGW"
+          os: windows-latest
+          build_type: "Release"
+          cc: "gcc"
+          cxx: "g++"
+          sfml_build: SFML-2.5.1-windows-gcc-7.3.0-mingw-64-bit
+        - name: "Linux"
+          os: ubuntu-latest
+          build_type: "Release"
+          cc: "gcc"
+          cxx: "g++"
+        
+    steps:
+    - uses: actions/checkout@v2
+   
+    - name: Install dependencies on windows
+      if: startsWith(matrix.config.os, 'windows')
+      run: |
+        choco install ninja cmake
+        curl --remote-name --location --remote-header-name --insecure \
+          https://github.com/SFML/SFML/releases/download/2.5.1/${{ matrix.config.sfml_build }}.zip
+        7z x ${{ matrix.config.sfml_build }}.zip
+        rm -f ${{ matrix.config.sfml_build }}.zip
+        mv SFML-2.5.1 C:\\SFML
+        
+    - name: Install dependecies on linux
+      if: startsWith(matrix.config.os, 'ubuntu')
+      run: |
+        sudo apt-get install ninja-build libsfml-dev
+    
+    - name: Configure
+      shell: bash
+      run: |
+        cmake \
+          -S . \
+          -B . \
+          -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }} \
+          -G "${{ matrix.config.generators }}" \
+          -DCMAKE_INSTALL_PREFIX:PATH=instdir 
+    
+    - name: Build
+      shell: bash
+      run: cmake --build . --config ${{ matrix.config.build_type }}
