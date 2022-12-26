@@ -32,6 +32,7 @@ jobs:
    
     - name: Install dependencies on windows
       if: startsWith(matrix.config.os, 'windows')
+      shell: bash
       run: |
         choco install ninja cmake
         curl https://github.com/SFML/SFML/releases/download/2.5.1/${{ matrix.config.sfml_build }}.zip \
