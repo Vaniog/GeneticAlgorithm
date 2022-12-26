@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   build:
@@ -17,6 +17,7 @@ jobs:
         - name: "Windows Latest MinGW"
           os: windows-latest
           artifact: "windows.zip"
+          to_pack: GeneticAlgorithm.exe Resources/
           build_type: "Release"
           cc: "gcc"
           cxx: "g++"
@@ -26,6 +27,7 @@ jobs:
         - name: "Linux"
           os: ubuntu-latest
           artifact: "linux.zip"
+          to_pack: GeneticAlgorithm Resources/
           build_type: "Release"
           cc: "gcc"
           cxx: "g++"
@@ -67,7 +69,7 @@ jobs:
     - name: Pack
       shell: bash
       run: |
-        ${{ matrix.config.archiver }} ${{ matrix.config.artifact }} GeneticAlgorithm* Resources/
+        ${{ matrix.config.archiver }} ${{ matrix.config.artifact }} ${{ matrix.config.to_pack }}
         
     - name: Upload
       shell: bash
