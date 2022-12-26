@@ -34,7 +34,9 @@ jobs:
       if: startsWith(matrix.config.os, 'windows')
       run: |
         choco install ninja cmake
-        curl --remote-name --location --remote-header-name --insecure https://github.com/SFML/SFML/releases/download/2.5.1/${{ matrix.config.sfml_build }}.zip
+        curl https://github.com/SFML/SFML/releases/download/2.5.1/${{ matrix.config.sfml_build }}.zip \
+          --remote-name --location --remote-header-name --insecure
+        
         7z x ${{ matrix.config.sfml_build }}.zip
         rm ${{ matrix.config.sfml_build }}.zip
         mv SFML-2.5.1 C:\\SFML
