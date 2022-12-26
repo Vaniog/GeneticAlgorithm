@@ -18,12 +18,14 @@ jobs:
           build_type: "Release"
           cc: "gcc"
           cxx: "g++"
+          generators: "Ninja"
           sfml_build: SFML-2.5.1-windows-gcc-7.3.0-mingw-64-bit
         - name: "Linux"
           os: ubuntu-latest
           build_type: "Release"
           cc: "gcc"
           cxx: "g++"
+          generators: "Ninja"
         
     steps:
     - uses: actions/checkout@v2
