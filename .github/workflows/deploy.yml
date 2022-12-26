@@ -3,11 +3,13 @@ name: deploy
 on:
   workflow_dispatch:
   push:
+    branches:
+      - main
 
 jobs:
   build:
-    name: build-windows
-    runs-on: ${{ matrix.config.os }} # будет запускаться по очереди на всех типах машин
+    name: deploy
+    runs-on: ${{ matrix.config.os }} # run on different machines
     strategy:
       fail-fast: false
       matrix:
@@ -29,6 +31,7 @@ jobs:
           cxx: "g++"
           archiver: "7z a"
           generators: "Ninja"
+        
     steps:
     - uses: actions/checkout@v2
    
@@ -36,8 +39,6 @@ jobs:
       if: startsWith(matrix.config.os, 'windows')
       run: |
         choco install ninja cmake
-        ninja --version
-        cmake --version        
         curl -OLJk https://github.com/SFML/SFML/releases/download/2.5.1/${{ matrix.config.sfml_build }}.zip
         7z x ${{ matrix.config.sfml_build }}.zip
         mv SFML-2.5.1 C:\\SFML
@@ -46,14 +47,10 @@ jobs:
       if: startsWith(matrix.config.os, 'ubuntu')
       run: |
         sudo apt-get install ninja-build libsfml-dev
-        ninja --version
-        cmake --version        
     
     - name: Configure
       shell: bash
       run: |
-        mkdir build
-        mkdir instdir
         cmake \
           -S . \
           -B . \
